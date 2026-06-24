@@ -285,7 +285,8 @@
 
             <nav class="nav-links" id="main-navigation-menu-bar">
                 <a id="nav-showcase" class="active" onclick="switchView('showcase')">Portfolio</a>
-                <a id="nav-dashboard" class="workspace-nav-node" onclick="switchView('dashboard')">Workspace Hub</a>
+                <!-- Added secure click handler for Dashboard protection locker -->
+                <a id="nav-dashboard" class="workspace-nav-node" onclick="validateAdminAccessGateThenSwitch()">Workspace Hub</a>
                 <a id="nav-share-popup" style="color:var(--coral-pink); font-weight:800; cursor:pointer;" onclick="triggerSmartShareNotificationSystem()">🔗 Share Portfolio</a>
                 <button class="theme-toggle-btn" onclick="toggleGlobalThemeEngine()">🌓</button>
             </nav>
@@ -433,6 +434,7 @@
         <div class="lightbox-content" onclick="event.stopPropagation()"><img id="lightbox-img" src=""></div>
     </div>
 
+    <!-- MAIN SYSTEM CORE OPERATIONS -->
     <script>
         let db = null;
         let activeEventId = null;
@@ -441,6 +443,7 @@
         let localFilterValue = 'all';
         let cachedPendingBrandingImagesArray = []; 
         let isSharingIsolationModeActive = false;
+        let isSessionAdminUnlocked = false; // Admin Lock parameter string tracking
 
         const DEFAULT_CATEGORIES = ["Posters", "Standees", "Certificates", "ID Cards", "Bands", "Selfie Points", "Branding", "Backdrops"];
 
@@ -453,12 +456,28 @@
             setupGlobalUniversalLiquidEngine();
             setInterval(trackAutomatedFocalBlurEngine, 200);
             
-            // PROCESS URL SHARED INJECTED CLOUD DATA INSTEAD OF LOCAL DB
-            unpackCloudDataFromUrlParameters();
+            enforceUrlParameterPrivacyFilter();
         });
 
-        // 🚀 GENIUS SYSTEM: URL se deep-staged parameters decode karke screen pe render karna
-        function unpackCloudDataFromUrlParameters() {
+        // 🔒 ADMIN GATEWAY LOCK SYSTEM
+        function validateAdminAccessGateThenSwitch() {
+            if (isSessionAdminUnlocked) {
+                switchView('dashboard');
+                return;
+            }
+            
+            const accessPinCodeInput = prompt("🔒 Access Denied! Enter Secret Admin PIN to open Workspace Hub panel:");
+            if (accessPinCodeInput === "4865") {
+                isSessionAdminUnlocked = true;
+                spawnMatrixToastNotification("Access Granted! Admin Panel Unlocked.");
+                switchView('dashboard');
+            } else if (accessPinCodeInput !== null) {
+                alert("Wrong PIN! Authentication failed.");
+            }
+        }
+
+        // Smart Privacy URL Parameter Filter
+        function enforceUrlParameterPrivacyFilter() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'public') {
                 document.querySelectorAll(".workspace-nav-node").forEach(el => el.remove());
@@ -467,7 +486,6 @@
                 isSharingIsolationModeActive = true;
                 switchView('showcase');
 
-                // Check if cloud matrix payload exists
                 const cloudDataString = urlParams.get('data');
                 if (cloudDataString) {
                     try {
@@ -494,7 +512,6 @@
                 return;
             }
 
-            // Sync structural parameters from Local DB and pack into Base64 format
             const txEvents = db.transaction(["events"], "readonly").objectStore("events").getAll();
             txEvents.onsuccess = (e1) => {
                 const eventsList = e1.target.result;
@@ -511,7 +528,6 @@
                             branding: brandingList
                         };
 
-                        // Convert object payload mapping to cross-platform safe base64 stream
                         const stringifiedJson = unescape(encodeURIComponent(JSON.stringify(systemStatePackage)));
                         const base64Payload = btoa(stringifiedJson);
                         
@@ -838,10 +854,7 @@
                 if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural branding visual rules saved.</div>`; return; }
                 const compiledSet = [...images, ...images, ...images];
                 target.innerHTML = compiledSet.map(i => `
-                    <div class="brand-visual-card" onclick="openLightbox('${i.binary}')">
-                        <div class="brand-visual-img-container"><img src="${i.binary}"></div>
-                        <div class="brand-visual-label">${i.fileName.split('.')[0]}</div>
-                    </div>
+                    <div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>
                 `).join('');
             };
         }
@@ -880,7 +893,7 @@
             };
         }
         function openLightbox(src) { document.getElementById("lightbox-img").src = src; document.getElementById("global-lightbox").classList.add("active"); }
-        function closeLightbox() { document.getElementById("global-lightbox").classList.remove("active"); }
+        function closeLightbox() { document.getElementById("global-lightbox").remove ? document.getElementById("global-lightbox").classList.remove("active") : document.getElementById("global-lightbox").classList.remove("active"); }
     </script>
 </body>
 </html>
