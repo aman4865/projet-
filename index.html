@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AG — Premium Event Design Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Premium Crystal Glassmorphism Core Style System --- */
+        :root, [data-theme="dark"] {
+            --bg-dark: #090a0f; 
+            --bg-card: rgba(24, 26, 37, 0.65); 
+            --coral-pink: #f87171;
+            --lavender: #c3b5fd;
+            --off-white: #fef3c7;
+            --muted-gray: #828899;
+            --border-color: rgba(255, 255, 255, 0.09);
+            --text-main: #fef3c7;
+            --btn-metallic: linear-gradient(135deg, rgba(42, 45, 61, 0.8), rgba(22, 24, 34, 0.9));
+            --btn-text: #fef3c7;
+            --glass-blur: blur(20px);
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-display: 'Syne', sans-serif;
+        }
+
+        [data-theme="light"] {
+            --bg-dark: #f4ebd9; 
+            --bg-card: rgba(235, 219, 190, 0.75); 
+            --coral-pink: #dc2626; 
+            --lavender: #1e1b4b;
+            --off-white: #000000;
+            --muted-gray: #5e5a52;
+            --border-color: rgba(0, 0, 0, 0.12);
+            --text-main: #000000;
+            --btn-metallic: #dc2626;
+            --btn-text: #f4ebd9;
+            --glass-blur: blur(12px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s, color 0.4s;
+        }
+
+        .liquid-track-wrapper { position: relative; }
+        .liquid-track-wrapper::before {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(195,181,253,0.07) 0%, transparent 60%);
+            pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.3s ease;
+        }
+        [data-theme="light"] .liquid-track-wrapper::before {
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(220,38,38,0.04) 0%, transparent 60%);
+        }
+        .liquid-track-wrapper:hover::before { opacity: 1; }
+
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--bg-dark); opacity: 0.96; backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1440px; margin: 0 auto; padding: 1.1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center; gap: 2rem;
+        }
+
+        .logo-group { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-main); cursor: pointer; }
+        .logo-img { width: 100px; height: 100px; object-fit: contain; }
+        .logo-text { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--lavender); letter-spacing: -1px; }
+
+        .nav-search-bar { flex: 1; max-width: 480px; position: relative; }
+        .nav-search-bar input {
+            width: 100%; background: var(--bg-card); border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem 0.65rem 2.75rem; border-radius: 2rem; color: var(--text-main); font-size: 0.9rem; outline: none;
+            backdrop-filter: var(--glass-blur); transition: border-color 0.3s;
+        }
+        .nav-search-bar input:focus { border-color: var(--coral-pink); }
+        .nav-search-bar svg { position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%); color: var(--muted-gray); }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+        .nav-links a { color: var(--muted-gray); text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; }
+        .nav-links a.active, .nav-links a:hover { color: var(--text-main); }
+
+        .theme-toggle-btn {
+            background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+        }
+
+        .app-view { display: none; padding-top: 100px; min-height: calc(100vh - 160px); }
+        .app-view.active-view { display: block; }
+
+        .hero { max-width: 1440px; margin: 0 auto; padding: 3.5rem 2rem 1rem 2rem; }
+        .hero-tag { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: var(--coral-pink); font-weight: 800; margin-bottom: 0.75rem; }
+        .hero h1 { font-family: var(--font-display); font-size: clamp(2.4rem, 5.5vw, 4.5rem); line-height: 1.1; letter-spacing: -2px; margin-bottom: 2rem; }
+        .hero h1 span.gradient-text { background: linear-gradient(to right, var(--coral-pink), var(--lavender)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        [data-theme="light"] .hero h1 span.gradient-text { background: none; -webkit-background-clip: unset; -webkit-text-fill-color: unset; color: var(--coral-pink); }
+        
+        .hero-meta { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--border-color); padding-top: 2rem; flex-wrap: wrap; gap: 2rem; }
+        .hero-desc { max-width: 520px; color: var(--muted-gray); font-size: 1.05rem; }
+        .hero-stats { display: flex; gap: 2.5rem; }
+        
+        .stat-card-badge { 
+            background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.65rem 1.5rem; 
+            border-radius: 14px; min-width: 150px; backdrop-filter: var(--glass-blur);
+        }
+        .stat-card-badge h3 { font-family: var(--font-display); font-size: 2rem; color: var(--lavender); }
+        .stat-card-badge p { font-size: 0.75rem; text-transform: uppercase; color: var(--muted-gray); }
+
+        [data-theme="dark"] .stat-card-badge, [data-theme="dark"] .dash-card, .brand-visual-card {
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 1px 1px 0px rgba(255,255,255,0.05);
+        }
+
+        .showcase-section { max-width: 1440px; margin: 0 auto; padding: 2rem; display: flex; flex-direction: column; gap: 4rem; }
+        .category-row-container { width: 100%; }
+        .row-section-title { font-family: var(--font-display); font-size: 1.3rem; color: var(--lavender); margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- Continuous Loop Infrastructure --- */
+        .carousel-infinite-track-wrapper { width: 100%; overflow: hidden; padding: 1.25rem 0; white-space: nowrap; position: relative; }
+        .carousel-infinite-track-wrapper::before, .carousel-infinite-track-wrapper::after { content: ''; position: absolute; top:0; width: 120px; height: 100%; z-index: 5; pointer-events: none; }
+        .carousel-infinite-track-wrapper::before { left:0; background: linear-gradient(to right, var(--bg-dark), transparent); }
+        .carousel-infinite-track-wrapper::after { right:0; background: linear-gradient(to left, var(--bg-dark), transparent); }
+        
+        .carousel-infinite-inner { display: inline-block; animation: scrollerLoop 36s linear infinite; }
+        .carousel-infinite-track-wrapper:hover .carousel-infinite-inner { animation-play-state: paused; }
+        @keyframes scrollerLoop { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-33.333%, 0, 0); } }
+
+        .carousel-item-flat { 
+            display: inline-flex; align-items: center; justify-content: center; padding: 0.65rem 1.5rem; 
+            margin-right: 1.25rem; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); 
+            cursor: pointer; backdrop-filter: var(--glass-blur); transition: border-color 0.3s;
+        }
+        .carousel-item-flat:hover { border-color: var(--coral-pink); }
+        .carousel-item-flat span { font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+
+        /* --- Featured Layout Arrays --- */
+        .enhanced-room-grid-box { display: flex; flex-wrap: wrap; gap: 1rem; }
+        .enhanced-room-chip-node {
+            background: var(--btn-metallic); border: 1px solid var(--border-color); color: var(--btn-text);
+            padding: 0.75rem 1.6rem; border-radius: 14px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.75rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+        }
+        .enhanced-room-chip-node:hover { transform: translateY(-4px); border-color: var(--coral-pink); }
+        .enhanced-room-chip-node .room-folder-icon { color: var(--coral-pink); font-size: 1.1rem; }
+
+        .medium-liquid-card {
+            display: inline-block; width: 310px; height: 410px; background: var(--bg-card);
+            border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; position: relative;
+            cursor: pointer; margin-right: 2.5rem; vertical-align: top; transform: scale(0.92); filter: blur(3px); opacity: 0.5;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s, opacity 0.4s;
+        }
+        .medium-liquid-card.is-centered { transform: scale(1.04); filter: blur(0px); opacity: 1; border-color: var(--coral-pink); box-shadow: 0 15px 35px rgba(248, 113, 113, 0.15); }
+        .card-img-holder { width: 100%; height: 100%; position: relative; }
+        .card-img-holder img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-caption-layer { position: absolute; bottom: 0; left: 0; width: 100%; padding: 1.5rem; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%); color: #fff; white-space: normal; }
+        .card-caption-layer h4 { font-family: var(--font-display); font-size: 1.15rem; margin-top: 0.25rem; }
+        .card-caption-layer span { font-size: 0.7rem; text-transform: uppercase; color: var(--coral-pink); font-weight: 700; }
+
+        /* --- Rebranding Image Loop Roll UI --- */
+        .branding-scroll-view-container { width: 100%; overflow: hidden; position: relative; padding: 1rem 0; }
+        .branding-strip-linear-track { display: flex; gap: 2.5rem; animation: linearScrollingFlow 32s linear infinite; width: max-content; }
+        .branding-strip-linear-track:hover { animation-play-state: paused; }
+        @keyframes linearScrollingFlow {
+            from { transform: translate3d(0, 0, 0); }
+            to { transform: translate3d(-50%, 0, 0); }
+        }
+
+        .brand-visual-card {
+            background: var(--bg-card); border: 1px solid var(--border-color); width: 280px; height: 350px;
+            border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer;
+            backdrop-filter: var(--glass-blur); transition: border-color 0.3s;
+        }
+        .brand-visual-card:hover { border-color: var(--coral-pink); }
+        .brand-visual-img-container { width: 100%; height: 280px; overflow: hidden; background: #000; }
+        .brand-visual-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .brand-visual-label { padding: 1rem; font-weight: 700; font-size: 0.85rem; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* --- 3D Presentation Grid Layer --- */
+        .redirect-standalone-gallery-canvas { display: none; max-width: 1440px; margin: 0 auto; padding: 3rem 2rem; min-height: 700px; }
+        .redirect-standalone-gallery-canvas.active { display: block; }
+        
+        .back-node-link-btn {
+            background: var(--btn-metallic); border: 1px solid var(--border-color); color: var(--btn-text);
+            padding: 0.6rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; margin-bottom: 2.5rem; display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        
+        .standalone-staggered-deck-viewport { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2.5rem; perspective: 1200px; }
+        .standalone-staggered-deck-viewport .medium-liquid-card {
+            width: 100%; height: 390px; margin-right: 0; transform: rotateY(15deg) translateZ(-60px) scale(0.8); opacity: 0; filter: blur(0);
+            animation: cubic3DSpreadFan 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes cubic3DSpreadFan {
+            0% { transform: rotate(-8deg) translateY(80px) translateZ(-150px); opacity: 0; }
+            100% { transform: rotate(0deg) translateY(0) translateZ(0); opacity: 1; }
+        }
+
+        /* --- Hub Layout Studio Environment --- */
+        .dashboard-container { max-width: 1440px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 340px 1fr; gap: 3rem; }
+        @media(max-width: 992px) { .dashboard-container { grid-template-columns: 1fr; } }
+        
+        .dash-sidebar { display: flex; flex-direction: column; gap: 2rem; }
+        .dash-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; backdrop-filter: var(--glass-blur); }
+        .dash-card h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--lavender); margin-bottom: 1rem; }
+        
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--muted-gray); margin-bottom: 0.5rem; font-weight: 700; }
+        .input-ctrl { width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; color: var(--text-main); outline: none; }
+        .btn-prime { width: 100%; background: var(--btn-metallic); color: var(--btn-text); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        
+        .managed-list { list-style: none; max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; }
+        .managed-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.75rem; background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; }
+        .managed-item.active { border-color: var(--coral-pink); background: rgba(248, 113, 113, 0.04); }
+        .delete-action { color: #ff5e5e; background: none; border: none; font-size: 1.1rem; cursor: pointer; }
+
+        .dash-main { display: flex; flex-direction: column; gap: 2rem; }
+        .workspace-header { background: var(--bg-card); border: 1px solid var(--border-color); padding: 2rem; border-radius: 16px; backdrop-filter: var(--glass-blur); }
+        
+        .dropzone {
+            border: 2px dashed var(--border-color); background: rgba(0, 0, 0, 0.02); border-radius: 20px; padding: 4rem 2rem; text-align: center; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 1rem; transition: border-color 0.3s;
+        }
+        .dropzone:hover { border-color: var(--coral-pink); }
+        
+        .asset-control-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .asset-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; position: relative; }
+        .asset-preview-box { width: 100%; height: 150px; background: #000; overflow: hidden; position: relative; }
+        .asset-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        #pending-branding-frame-node {
+            background: rgba(248, 113, 113, 0.04); border: 1px dashed var(--coral-pink);
+            border-radius: 12px; padding: 1.25rem; margin-top: 1rem; display: none; flex-direction: column; gap: 0.75rem;
+        }
+
+        /* Glassmorphic Live Toast System */
+        #global-toast-matrix-hub {
+            position: fixed; top: 110px; right: 24px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 0.75rem; pointer-events: none;
+        }
+        .toast-popup-bubble {
+            background: rgba(24, 26, 37, 0.9); color: var(--text-main); border: 1px solid var(--coral-pink);
+            padding: 0.85rem 1.6rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem;
+            backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translate3d(120%, 0, 0); animation: slideToastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideToastIn { to { transform: translate3d(0, 0, 0); } }
+
+        .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(9,10,15,0.98); z-index: 5000; display: none; justify-content: center; align-items: center; }
+        .lightbox.active { display: flex; }
+        .lightbox-content img { max-width: 90vw; max-height: 82vh; object-fit: contain; border-radius: 8px; }
+        .lightbox-close { position: absolute; top: 2rem; right: 2rem; color: #fff; font-size: 2.5rem; background: none; border: none; cursor: pointer; }
+
+        .empty-indicator { padding: 4rem 2rem; text-align: center; color: var(--muted-gray); border: 1px dashed var(--border-color); border-radius: 16px; font-size: 0.95rem; grid-column: 1/-1; width: 100%; }
+        footer { border-top: 1px solid var(--border-color); padding: 5rem 2rem; background: rgba(0,0,0,0.05); margin-top: 5rem; }
+    </style>
+</head>
+<body data-theme="dark" class="liquid-track-wrapper" id="ag-root-context">
+
+    <!-- Global Toast Pipeline Hub -->
+    <div id="global-toast-matrix-hub"></div>
+
+    <header class="liquid-track-wrapper">
+        <div class="nav-container">
+            <a class="logo-group" onclick="switchView('showcase')">
+                <img src="./logo_transparent.png" alt="AG Logo" class="logo-img">
+                <!-- <span class="logo-text">AG</span> -->
+            </a>
+            
+            <div class="nav-search-bar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="global-search-input" placeholder="Search standalone pools, tags, segments..." oninput="executeLiveSystemSearch(event)">
+            </div>
+
+            <nav class="nav-links" id="main-navigation-menu-bar">
+                <a id="nav-showcase" class="active" onclick="switchView('showcase')">Portfolio</a>
+                <a id="nav-dashboard" class="workspace-nav-node" onclick="switchView('dashboard')">Workspace Hub</a>
+                <a id="nav-share-popup" style="color:var(--coral-pink); font-weight:800; cursor:pointer;" onclick="triggerSmartShareNotificationSystem()">🔗 Share Portfolio</a>
+                <button class="theme-toggle-btn" onclick="toggleGlobalThemeEngine()">🌓</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- PORTFOLIO VIEW CONTEXT -->
+    <main id="view-showcase" class="app-view active-view">
+        <div id="portfolio-primary-canvas-node">
+            <section class="hero liquid-track-wrapper">
+                <div class="hero-tag">Design Portfolio</div>
+                <h1>Design that makes <br><span class="gradient-text">events unforgettable.</span></h1>
+                <div class="hero-meta">
+                    <div class="hero-desc">Standees, backdrops, ID cards, selfie points & full event branding — crafted for college events that leave a mark.</div>
+                    <div class="hero-stats">
+                        <div class="stat-card-badge">
+                            <h3 id="stat-events">0</h3>
+                            <p>EVENTS</p>
+                        </div>
+                        <div class="stat-card-badge">
+                            <h3 id="stat-designs">0</h3>
+                            <p>DESIGNS</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="showcase-section">
+                <div class="category-row-container">
+                    <h3 class="row-section-title">Design Categories</h3>
+                    <div class="carousel-infinite-track-wrapper">
+                        <div class="carousel-infinite-inner" id="static-categories-grid-target"></div>
+                    </div>
+                </div>
+
+                <div class="category-row-container">
+                    <h3 class="row-section-title">📂 Featured Event Rooms</h3>
+                    <div class="enhanced-room-grid-box" id="gallery-redirection-grid-target"></div>
+                </div>
+
+                <div class="category-row-container">
+                    <h3 class="row-section-title"> All Dynamic Creations Stream</h3>
+                    <div class="carousel-infinite-track-wrapper" id="main-pool-carousel-scroller-node">
+                        <div class="carousel-infinite-inner" id="focused-pool-ticker-inner-track"></div>
+                    </div>
+                </div>
+
+                <!-- Auto-Scrolling Branding Canvas Loop Row Frame -->
+                <div class="category-row-container">
+                    <h3 class="row-section-title">🖼️ Rebranding Visuals Stream</h3>
+                    <div class="branding-scroll-view-container">
+                        <div class="branding-strip-linear-track" id="portfolio-branding-visuals-append-track"></div>
+                    </div>
+                </div>
+
+                <!-- CRISP PREMIUM ABOUT ME SECTION WITH CORES SKILLS & DYNAMIC EMAIL LINK -->
+                <div class="category-row-container">
+                    <h3 class="row-section-title">ABOUT ME</h3>
+                    <div class="dash-card liquid-track-wrapper" style="padding: 2.25rem; margin: 0; border-radius: 20px; border: 1px solid var(--border-color);">
+                        <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-main); font-weight: 500; margin-bottom: 1.5rem;">
+                            I operate at the intersection of logical backend infrastructure and elite visual storytelling. 
+                            As an engineering student managing deep tech data, combined with building production identities, 
+                            I engineer clean, high-impact glassmorphic portfolio streams and aesthetic design frameworks. 
+                            From optimizing system workflows to executing macro event branding grids—I turn raw concept maps into premium scalable realities.
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--lavender);">Connect Node:</span>
+                            <a href="mailto:asarathe4865@gmail.com" style="color: var(--coral-pink); font-weight: 700; text-decoration: none; font-size: 1rem; border-bottom: 1px dashed var(--coral-pink); padding-bottom: 2px; transition: color 0.2s;" onmouseover="this.style.color='var(--lavender)'" onmouseout="this.style.color='var(--coral-pink)'">
+                                asarathe4865@gmail.com
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="portfolio-redirected-gallery-canvas" class="redirect-standalone-gallery-canvas">
+            <button class="back-node-link-btn" onclick="exitRedirectedGalleryView()">&larr; Return to Base Portfolio</button>
+            <h2 id="standalone-page-header-title" style="font-family:var(--font-display); margin-bottom:2.5rem; font-size:2.5rem; font-weight: 800; letter-spacing: -1px;"></h2>
+            <div class="standalone-grid standalone-staggered-deck-viewport" id="standalone-cards-fanning-target"></div>
+        </div>
+    </main>
+
+    <!-- WORKSPACE STUDIO MANAGEMENT HUB -->
+    <main id="view-dashboard" class="app-view">
+        <div class="dashboard-container">
+            <aside class="dash-sidebar">
+                <div class="dash-card liquid-track-wrapper">
+                    <h3>Create New Event</h3>
+                    <div class="form-group">
+                        <label>Event Name</label>
+                        <input type="text" id="event-name-input" class="input-ctrl" placeholder="e.g., Hackwarts 2026">
+                    </div>
+                    <button class="btn-prime" onclick="handleCreateEvent()">Add Workspace Room</button>
+                </div>
+                
+                <div class="dash-card liquid-track-wrapper">
+                    <h3>Available Workspaces</h3>
+                    <ul class="managed-list" id="sidebar-events-list"></ul>
+                </div>
+
+                <!-- Image-based Branding Upload Component Block (Multiple) -->
+                <div class="dash-card liquid-track-wrapper">
+                    <h3>Upload Branding Images</h3>
+                    <p style="font-size:0.75rem; color:var(--muted-gray); margin-bottom:1.25rem;">Attach continuous rebranding graphics images directly into infinite carousel loop row.</p>
+                    <button class="btn-prime" onclick="triggerBrandingImageSelector()">Choose Image Assets</button>
+                    <input type="file" id="hidden-branding-img-uploader" accept="image/*" multiple style="display:none;" onchange="handleBrandingImageSelectionStage(event)">
+                    
+                    <!-- Dynamic Staging Node Interface for Multiple Files -->
+                    <div id="pending-branding-frame-node">
+                        <div id="pending-branding-files-list" style="max-height:120px; overflow-y:auto; font-size:0.8rem; font-weight:700; color:var(--coral-pink); display:flex; flex-direction:column; gap:4px; margin-bottom:8px;"></div>
+                        <button class="btn-prime" style="background:var(--coral-pink); border-color:var(--coral-pink); color:white;" onclick="commitStagedBrandingImagesToDatabase()">Confirm & Save Guidelines Images</button>
+                    </div>
+
+                    <ul class="managed-list" id="dashboard-branding-managed-list" style="margin-top:1rem;"></ul>
+                </div>
+            </aside>
+
+            <section class="dash-main">
+                <div class="workspace-header liquid-track-wrapper">
+                    <div class="workspace-title">
+                        <h2 id="current-workspace-title">No Active Workspace</h2>
+                        <p style="color:var(--muted-gray); font-size:0.85rem; margin-top:0.25rem;">Activate a room node from the sidebar list parameters to drop files.</p>
+                    </div>
+                </div>
+
+                <div class="dropzone liquid-track-wrapper" id="upload-dropzone" onclick="triggerFileInput()">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                    <p style="font-weight:700; font-size:1.05rem;">Drag & Drop Event Design Assets or Click Here</p>
+                    <input type="file" id="hidden-file-input" multiple style="display:none;" onchange="handleFileSelection(event)">
+                </div>
+
+                <div class="dash-card liquid-track-wrapper">
+                    <div class="form-group" style="margin:0;">
+                        <label>Asset Storage Categorization Label Tag</label>
+                        <select id="batch-category-select" class="input-ctrl"></select>
+                    </div>
+                </div>
+
+                <div class="asset-control-grid" id="workspace-assets-grid"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="liquid-track-wrapper">
+        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with IndexedDB Structural State Engine.</p>
+    </footer>
+
+    <div class="lightbox" id="global-lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <div class="lightbox-content" onclick="event.stopPropagation()"><img id="lightbox-img" src=""></div>
+    </div>
+
+    <!-- MAIN CORE RUNTIME FRAMEWORK SCRIPTS -->
+    <script>
+        let db = null;
+        let activeEventId = null;
+        let globalSearchTokenString = '';
+        let localFilterType = 'all';
+        let localFilterValue = 'all';
+        let cachedPendingBrandingImagesArray = []; 
+        let isSharingIsolationModeActive = false;
+
+        const DEFAULT_CATEGORIES = ["Posters", "Standees", "Certificates", "ID Cards", "Bands", "Selfie Points", "Branding", "Backdrops"];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem('ag-theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+
+            initIndexedDB();
+            setupDragAndDrop();
+            setupGlobalUniversalLiquidEngine();
+            setInterval(trackAutomatedFocalBlurEngine, 200);
+            
+            enforceUrlParameterPrivacyFilter();
+        });
+
+        // Smart Privacy URL Parameter Filter
+        function enforceUrlParameterPrivacyFilter() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('view') === 'public') {
+                document.querySelectorAll(".workspace-nav-node").forEach(el => el.remove());
+                const dashboardContainer = document.getElementById("view-dashboard");
+                if(dashboardContainer) dashboardContainer.remove();
+                
+                isSharingIsolationModeActive = true;
+                switchView('showcase');
+                console.log("AG Secure Engine: Public view enforced via URL param.");
+            }
+        }
+
+        // AUTOMATED SHARING NOTIFICATION BOX UI
+        function triggerSmartShareNotificationSystem() {
+            const shareWorkspaceToo = confirm("Do you want to share the Workspace Hub too?\n\nClick 'OK' (YES) to share everything.\nClick 'Cancel' (NO) to share ONLY the Portfolio Showcase.");
+            const baseWebUrl = window.location.origin + window.location.pathname;
+            let finalShareableLink = "";
+
+            if (shareWorkspaceToo) {
+                finalShareableLink = baseWebUrl;
+                spawnMatrixToastNotification("Full Website Link (With Workspace) copied to Clipboard!");
+            } else {
+                finalShareableLink = baseWebUrl + "?view=public";
+                spawnMatrixToastNotification("Secure Portfolio Link (Only Showcase) copied to Clipboard!");
+            }
+
+            navigator.clipboard.writeText(finalShareableLink).catch(err => {
+                console.error("Could not copy string text: ", err);
+            });
+        }
+
+        // Dynamic Toast Banner Engine
+        function spawnMatrixToastNotification(message) {
+            const hub = document.getElementById("global-toast-matrix-hub");
+            if(!hub) return;
+            const bubble = document.createElement("div");
+            bubble.className = "toast-popup-bubble";
+            bubble.innerText = message;
+            hub.appendChild(bubble);
+            setTimeout(() => { bubble.style.opacity = "0"; setTimeout(() => bubble.remove(), 400); }, 3500);
+        }
+
+        function setupGlobalUniversalLiquidEngine() {
+            document.addEventListener('mousemove', (e) => {
+                const elements = document.querySelectorAll('.liquid-track-wrapper');
+                elements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    el.style.setProperty('--mouse-x', `${x}%`);
+                    el.style.setProperty('--mouse-y', `${y}%`);
+                });
+            });
+        }
+
+        function toggleGlobalThemeEngine() {
+            const current = document.body.getAttribute('data-theme');
+            const targetMode = current === 'light' ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', targetMode);
+            localStorage.setItem('ag-theme', targetMode);
+        }
+
+        function executeLiveSystemSearch(event) {
+            globalSearchTokenString = event.target.value.toLowerCase().trim();
+            renderGlobalClientShowcasePools();
+        }
+
+        function initIndexedDB() {
+            const request = indexedDB.open("AG_PremiumPortfolio_DB", 5);
+            request.onsuccess = (e) => { db = e.target.result; seedDefaultCategories(); };
+            request.onupgradeneeded = (e) => {
+                const database = e.target.result;
+                if (!database.objectStoreNames.contains("events")) database.createObjectStore("events", { keyPath: "id", autoIncrement: true });
+                if (!database.objectStoreNames.contains("categories")) database.createObjectStore("categories", { keyPath: "name" });
+                if (!database.objectStoreNames.contains("rebranding_pdf")) database.createObjectStore("rebranding_pdf", { keyPath: "id", autoIncrement: true });
+                if (!database.objectStoreNames.contains("assets")) {
+                    const store = database.createObjectStore("assets", { keyPath: "id", autoIncrement: true });
+                    store.createIndex("eventId", "eventId", { unique: false });
+                }
+            };
+        }
+
+        function seedDefaultCategories() {
+            const tx = db.transaction(["categories"], "readwrite");
+            const store = tx.objectStore("categories");
+            DEFAULT_CATEGORIES.forEach(c => store.put({ name: c }));
+            
+            tx.oncomplete = () => {
+                const selectElement = document.getElementById("batch-category-select");
+                if(selectElement) selectElement.innerHTML = DEFAULT_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+                
+                const targetScroller = document.getElementById("static-categories-grid-target");
+                if(targetScroller) {
+                    const chipsHtml = DEFAULT_CATEGORIES.map(c => `
+                        <div class="carousel-item-flat liquid-track-wrapper" onclick="selectSegmentTagScopeFilter('${c}')">
+                            <span>✨ ${c}</span>
+                        </div>
+                    `).join('');
+                    targetScroller.innerHTML = chipsHtml + chipsHtml + chipsHtml;
+                }
+                syncCoreStateEngine();
+            };
+        }
+
+        function switchView(viewName) {
+            if (isSharingIsolationModeActive && viewName === 'dashboard') {
+                alert("Protected Portfolio Mode is Active!");
+                return;
+            }
+            const targetView = document.getElementById(`view-${viewName}`);
+            if(!targetView) return;
+
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view'));
+            targetView.classList.add('active-view');
+            
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            const targetLink = document.getElementById(`nav-${viewName}`);
+            if (targetLink) targetLink.classList.add('active');
+
+            if(viewName === 'showcase') { exitRedirectedGalleryView(); renderClientShowcase(); }
+            if(viewName === 'dashboard') renderDashboardWorkspaces();
+        }
+
+        function syncCoreStateEngine() { renderDashboardWorkspaces(); renderClientShowcase(); }
+
+        function handleCreateEvent() {
+            const input = document.getElementById("event-name-input");
+            if (!input.value.trim()) return;
+            db.transaction(["events"], "readwrite").objectStore("events").add({ name: input.value.trim(), timestamp: Date.now() }).onsuccess = (e) => {
+                activeEventId = e.target.result; input.value = ""; 
+                spawnMatrixToastNotification("Workspace Room Node Added Successfully!");
+                syncCoreStateEngine();
+            };
+        }
+
+        function selectWorkspace(id) { activeEventId = id; renderDashboardWorkspaces(); }
+
+        function deleteEventWorkspace(id, event) {
+            event.stopPropagation(); if(!confirm("Delete this workspace room node?")) return;
+            const tx = db.transaction(["events", "assets"], "readwrite");
+            tx.objectStore("events").delete(id);
+            tx.oncomplete = () => { 
+                if(activeEventId === id) activeEventId = null; 
+                spawnMatrixToastNotification("Workspace Removed Node.");
+                syncCoreStateEngine(); 
+            };
+        }
+
+        function deleteAssetFromWorkspace(id, event) {
+            event.stopPropagation();
+            if(!confirm("Are you sure you want to delete this design template from the workspace?")) return;
+            const tx = db.transaction(["assets"], "readwrite");
+            tx.objectStore("assets").delete(id);
+            tx.oncomplete = () => { 
+                spawnMatrixToastNotification("Design Template Deleted.");
+                syncCoreStateEngine(); 
+            };
+        }
+
+        function triggerFileInput() { if(!activeEventId) return alert("Activate a workspace room node first."); document.getElementById("hidden-file-input").click(); }
+        
+        function setupDragAndDrop() {
+            const dz = document.getElementById("upload-dropzone");
+            if(!dz) return;
+            dz.addEventListener('dragover', (e) => { e.preventDefault(); });
+            dz.addEventListener('drop', (e) => { e.preventDefault(); if(activeEventId) processMediaFiles(e.dataTransfer.files); });
+        }
+        
+        function handleFileSelection(e) { processMediaFiles(e.target.files); }
+
+        function processMediaFiles(files) {
+            const cat = document.getElementById("batch-category-select").value;
+            let loaded = 0; const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
+            if(!arr.length) return;
+            arr.forEach(file => {
+                const r = new FileReader(); r.onload = (e) => {
+                    db.transaction(["assets"], "readwrite").objectStore("assets").add({ eventId: parseInt(activeEventId), title: file.name.split('.')[0].replace(/[-_]/g, ' '), category: cat, imageSrc: e.target.result, timestamp: Date.now() });
+                    if(++loaded === arr.length) {
+                        spawnMatrixToastNotification(`${loaded} Assets Staged Successfully!`);
+                        syncCoreStateEngine();
+                    }
+                };
+                r.readAsDataURL(file);
+            });
+        }
+
+        function renderDashboardWorkspaces() {
+            if(!db || document.getElementById("view-dashboard") === null) return;
+            db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (e) => {
+                const events = e.target.result;
+                const list = document.getElementById("sidebar-events-list");
+                if(!events.length) { list.innerHTML = `<li class="empty-indicator">No workspaces cataloged.</li>`; return; }
+                if(activeEventId === null) activeEventId = events[0].id;
+                list.innerHTML = events.map(ev => `<li class="managed-item ${ev.id === activeEventId?'active':''}" onclick="selectWorkspace(${ev.id})"><span>${ev.name}</span><button class="delete-action" onclick="deleteEventWorkspace(${ev.id}, event)">&times;</button></li>`).join('');
+                const current = events.find(ev => ev.id === activeEventId);
+                if(current) document.getElementById("current-workspace-title").innerText = current.name;
+                renderDashboardAssets();
+                renderDashboardBrandingListOnly();
+            };
+        }
+
+        function renderDashboardAssets() {
+            if(!activeEventId || document.getElementById("workspace-assets-grid") === null) return;
+            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBKeyRange.only(parseInt(activeEventId))).onsuccess = (e) => {
+                const assets = e.target.result;
+                const grid = document.getElementById("workspace-assets-grid");
+                if(!assets.length) { grid.innerHTML = `<div class="empty-indicator">No assets registered under this studio space node yet.</div>`; return; }
+                
+                grid.innerHTML = assets.map(a => `
+                    <div class="asset-card">
+                        <div class="asset-preview-box">
+                            <button class="asset-trash-btn" onclick="deleteAssetFromWorkspace(${a.id}, event)" title="Delete image node">&times;</button>
+                            <img src="${a.imageSrc}">
+                        </div>
+                        <div class="asset-mini-details">
+                            <p style="font-weight:700; font-size:0.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:120px;">${a.title}</p>
+                            <span style="font-size:0.7rem; color:var(--coral-pink); font-weight:700;">${a.category}</span>
+                        </div>
+                    </div>
+                `).join('');
+            };
+        }
+
+        function navigateToStandaloneGalleryView(eventId, eventName) {
+            document.getElementById("portfolio-primary-canvas-node").style.display = "none";
+            const targetCanvas = document.getElementById("portfolio-redirected-gallery-canvas");
+            targetCanvas.classList.add("active");
+            document.getElementById("standalone-page-header-title").innerText = eventName.toUpperCase();
+
+            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBKeyRange.only(parseInt(eventId))).onsuccess = (e) => {
+                const assets = e.target.result;
+                const targetDeck = document.getElementById("standalone-cards-fanning-target");
+                if(!assets.length) { targetDeck.innerHTML = `<div class="empty-indicator">This project container room is empty.</div>`; return; }
+                
+                targetDeck.innerHTML = assets.map((a, index) => `
+                    <div class="medium-liquid-card liquid-track-wrapper" style="animation-delay:${index * 50}ms;" onclick="openLightbox('${a.imageSrc}')">
+                        <div class="card-img-holder">
+                            <img src="${a.imageSrc}">
+                            <div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div>
+                        </div>
+                    </div>
+                `).join('');
+            };
+        }
+
+        function exitRedirectedGalleryView() {
+            document.getElementById("portfolio-primary-canvas-node").style.display = "block";
+            document.getElementById("portfolio-redirected-gallery-canvas").classList.remove("active");
+        }
+
+        function selectSegmentTagScopeFilter(catName) {
+            localFilterType = 'category'; localFilterValue = catName;
+            renderGlobalClientShowcasePools();
+        }
+
+        function trackAutomatedFocalBlurEngine() {
+            const track = document.getElementById("focused-pool-ticker-inner-track"); if(!track) return;
+            const cards = track.querySelectorAll(".medium-liquid-card"); const center = window.innerWidth / 2;
+            cards.forEach(c => {
+                const rect = c.getBoundingClientRect(); const cCenter = rect.left + (rect.width/2);
+                if(Math.abs(cCenter - center) < 160) c.classList.add("is-centered"); else c.classList.remove("is-centered");
+            });
+        }
+
+        function renderGlobalClientShowcasePools() {
+            if(!db) return;
+            db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (evEvent) => {
+                const evs = evEvent.target.result; const evMap = {}; evs.forEach(e => evMap[e.id] = e.name);
+                db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
+                    let assets = asEvent.target.result;
+                    if(localFilterType === 'category') assets = assets.filter(a => a.category === localFilterValue);
+                    if(globalSearchTokenString) {
+                        assets = assets.filter(a => 
+                            a.title.toLowerCase().includes(globalSearchTokenString) ||
+                            a.category.toLowerCase().includes(globalSearchTokenString) ||
+                            (evMap[a.eventId] && evMap[a.eventId].toLowerCase().includes(globalSearchTokenString))
+                        );
+                    }
+                    const innerTrack = document.getElementById("focused-pool-ticker-inner-track");
+                    if(!innerTrack) return;
+                    if(!assets.length) { 
+                        innerTrack.innerHTML = `<div class="empty-indicator" style="display:inline-block; width:100vw; border:none; font-weight:500;">No matching designs found in active records space matrix.</div>`; 
+                        return; 
+                    }
+                    const rawCardsHtml = assets.map(a => `
+                        <div class="medium-liquid-card liquid-track-wrapper" id="pool-asset-${a.id}" onclick="openLightbox('${a.imageSrc}')">
+                            <div class="card-img-holder">
+                                <img src="${a.imageSrc}">
+                                <div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div>
+                            </div>
+                        </div>
+                    `).join('');
+                    innerTrack.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
+                };
+            };
+        }
+
+        // --- BRANDING MANAGEMENT HUB SYSTEM (MULTIPLE IMAGES TRACK) ---
+        function triggerBrandingImageSelector() { document.getElementById("hidden-branding-img-uploader").click(); }
+        
+        function handleBrandingImageSelectionStage(e) {
+            const files = e.target.files;
+            if(!files.length) return;
+
+            cachedPendingBrandingImagesArray = []; 
+            const listContainer = document.getElementById("pending-branding-files-list");
+            listContainer.innerHTML = ""; 
+
+            let loadedCount = 0;
+            const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+
+            if(!validFiles.length) return alert("Please select standard graphic image files.");
+
+            validFiles.forEach(file => {
+                const r = new FileReader();
+                r.onload = (event) => {
+                    cachedPendingBrandingImagesArray.push({
+                        fileName: file.name,
+                        binary: event.target.result
+                    });
+                    
+                    const fileRow = document.createElement("div");
+                    fileRow.innerText = ` Staged: ${file.name}`;
+                    fileRow.style.overflow = "hidden";
+                    fileRow.style.textOverflow = "ellipsis";
+                    fileRow.style.whiteSpace = "nowrap";
+                    listContainer.appendChild(fileRow);
+
+                    loadedCount++;
+                    if (loadedCount === validFiles.length) {
+                        document.getElementById("pending-branding-frame-node").style.display = "flex";
+                        spawnMatrixToastNotification(`${validFiles.length} images staged! Click save.`);
+                    }
+                };
+                r.readAsDataURL(file);
+            });
+        }
+
+        function commitStagedBrandingImagesToDatabase() {
+            if(!cachedPendingBrandingImagesArray.length || !db) return;
+
+            const tx = db.transaction(["rebranding_pdf"], "readwrite");
+            const store = tx.objectStore("rebranding_pdf");
+            
+            cachedPendingBrandingImagesArray.forEach(img => {
+                store.add({
+                    fileName: img.fileName,
+                    binary: img.binary,
+                    timestamp: Date.now()
+                });
+            });
+
+            tx.oncomplete = () => {
+                const countSaved = cachedPendingBrandingImagesArray.length;
+                cachedPendingBrandingImagesArray = [];
+                document.getElementById("pending-branding-frame-node").style.display = "none";
+                document.getElementById("hidden-branding-img-uploader").value = "";
+                
+                spawnMatrixToastNotification(`${countSaved} Branding Guidelines Images Saved Successfully!`);
+                renderDashboardBrandingListOnly();
+            };
+        }
+
+        function deleteBrandingVisualRecord(id) {
+            if(!confirm("Evict this branding template layout?")) return;
+            db.transaction(["rebranding_pdf"], "readwrite").objectStore("rebranding_pdf").delete(id).oncomplete = () => {
+                spawnMatrixToastNotification("Branding guidelines layout evicted.");
+                renderDashboardBrandingListOnly();
+            };
+        }
+
+        function renderDashboardBrandingListOnly() {
+            const target = document.getElementById("dashboard-branding-managed-list");
+            if (!target || !db) return;
+
+            db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
+                const images = e.target.result;
+                if(!images.length) { target.innerHTML = `<li style="font-size:0.8rem; color:var(--muted-gray); padding:0.5rem 0;">No reference vectors attached</li>`; return; }
+                target.innerHTML = images.map(i => `<li class="managed-item"><span style="font-size:0.8rem; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px;">🖼️ ${i.fileName}</span><button class="delete-action" onclick="deleteBrandingVisualRecord(${i.id})">&times;</button></li>`).join('');
+            };
+        }
+
+        function renderRebrandingStripShowcaseView() {
+            db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
+                const images = e.target.result;
+                const target = document.getElementById("portfolio-branding-visuals-append-track");
+                if(!target) return;
+                if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="width:100vw; border:none;">No continuous structural branding visual rules saved.</div>`; return; }
+                
+                const compiledSet = [...images, ...images, ...images];
+                target.innerHTML = compiledSet.map(i => `
+                    <div class="brand-visual-card" onclick="openLightbox('${i.binary}')">
+                        <div class="brand-visual-img-container">
+                            <img src="${i.binary}">
+                        </div>
+                        <div class="brand-visual-label">${i.fileName.split('.')[0].replace(/[-_]/g, ' ')}</div>
+                    </div>
+                `).join('');
+            };
+        }
+
+        function triggerSmoothStatAnimate(elementId, targetValue) {
+            const el = document.getElementById(elementId);
+            if(!el) return;
+            let current = 0;
+            if(targetValue === 0) { el.innerText = "0"; return; }
+            const duration = 1000; 
+            const steps = Math.min(targetValue, 30);
+            const stepTime = Math.floor(duration / steps);
+            const increment = Math.ceil(targetValue / steps);
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetValue) { el.innerText = targetValue; clearInterval(timer); } 
+                else { el.innerText = current; }
+            }, stepTime);
+        }
+
+        function renderClientShowcase() {
+            if(!db) return;
+            renderRebrandingStripShowcaseView();
+            db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (e) => {
+                triggerSmoothStatAnimate("stat-events", e.target.result.length);
+                const targetGrid = document.getElementById("gallery-redirection-grid-target");
+                if(targetGrid) {
+                    targetGrid.innerHTML = e.target.result.map(ev => `
+                        <button class="enhanced-room-chip-node liquid-track-wrapper" onclick="navigateToStandaloneGalleryView(${ev.id}, '${ev.name}')">
+                            <span class="room-folder-icon">📂</span> ${ev.name}
+                        </button>
+                    `).join('');
+                }
+                db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
+                    triggerSmoothStatAnimate("stat-designs", asEvent.target.result.length);
+                    renderGlobalClientShowcasePools();
+                };
+            };
+        }
+        function openLightbox(src) { document.getElementById("lightbox-img").src = src; document.getElementById("global-lightbox").classList.add("active"); }
+        function closeLightbox() { document.getElementById("global-lightbox").classList.remove("active"); }
+    </script>
+</body>
+</html>
