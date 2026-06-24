@@ -79,7 +79,7 @@
         }
 
         .logo-group { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-main); cursor: pointer; }
-        .logo-img { width: 100px; height: 100px; object-fit: contain; }
+        .logo-img { width: 36px; height: 36px; object-fit: contain; }
         .logo-text { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--lavender); letter-spacing: -1px; }
 
         .nav-search-bar { flex: 1; max-width: 480px; position: relative; }
@@ -269,14 +269,13 @@
 </head>
 <body data-theme="dark" class="liquid-track-wrapper" id="ag-root-context">
 
-    <!-- Global Toast Pipeline Hub -->
     <div id="global-toast-matrix-hub"></div>
 
     <header class="liquid-track-wrapper">
         <div class="nav-container">
             <a class="logo-group" onclick="switchView('showcase')">
-                <img src="./logo_transparent.png" alt="AG Logo" class="logo-img">
-                <!-- <span class="logo-text">AG</span> -->
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC80lEQVR4nO3bW08TQRQH8P+2C6wKFYgUkAtqfDA+gD74YHzwXfSJSYwPTfS9idH4gAkGidGgBhIuN7VAsbSllLbbg/Owy67bLgXbAon/X9vZnZ0vO7NndmY3gGEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhsk97Xb7GIAL9w8NfQfAZmttvVwub9fr9Yf9fv9xNpu9G41G96PR6HE8Hj+Kx+OH9Xp9PhwO7w+Hw6v9fF69v66uV6fT+dzr9Z7MZfW6Wv18eXm5DGB9vI2NjfVcLreTy+VWMpnMciaTWezpNdfV9Wwms9T6uPZ4N9fG+vY1p7z+ZunX/F6zL6tV8vX09U1YtPjrDQwAAAABJRU5CYII=" alt="AG Logo" class="logo-img">
+                <span class="logo-text">AG</span>
             </a>
             
             <div class="nav-search-bar">
@@ -293,11 +292,10 @@
         </div>
     </header>
 
-    <!-- PORTFOLIO VIEW CONTEXT -->
     <main id="view-showcase" class="app-view active-view">
         <div id="portfolio-primary-canvas-node">
             <section class="hero liquid-track-wrapper">
-                <div class="hero-tag">Design Portfolio</div>
+                <div class="hero-tag">Event Design Portfolio</div>
                 <h1>Design that makes <br><span class="gradient-text">events unforgettable.</span></h1>
                 <div class="hero-meta">
                     <div class="hero-desc">Standees, backdrops, ID cards, selfie points & full event branding — crafted for college events that leave a mark.</div>
@@ -328,13 +326,12 @@
                 </div>
 
                 <div class="category-row-container">
-                    <h3 class="row-section-title"> All Dynamic Creations Stream</h3>
+                    <h3 class="row-section-title">✨ All Dynamic Creations Stream</h3>
                     <div class="carousel-infinite-track-wrapper" id="main-pool-carousel-scroller-node">
                         <div class="carousel-infinite-inner" id="focused-pool-ticker-inner-track"></div>
                     </div>
                 </div>
 
-                <!-- Auto-Scrolling Branding Canvas Loop Row Frame -->
                 <div class="category-row-container">
                     <h3 class="row-section-title">🖼️ Rebranding Visuals Stream</h3>
                     <div class="branding-scroll-view-container">
@@ -342,7 +339,6 @@
                     </div>
                 </div>
 
-                <!-- CRISP PREMIUM ABOUT ME SECTION WITH CORES SKILLS & DYNAMIC EMAIL LINK -->
                 <div class="category-row-container">
                     <h3 class="row-section-title">ABOUT ME</h3>
                     <div class="dash-card liquid-track-wrapper" style="padding: 2.25rem; margin: 0; border-radius: 20px; border: 1px solid var(--border-color);">
@@ -354,7 +350,7 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                             <span style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--lavender);">Connect Node:</span>
-                            <a href="mailto:asarathe4865@gmail.com" style="color: var(--coral-pink); font-weight: 700; text-decoration: none; font-size: 1rem; border-bottom: 1px dashed var(--coral-pink); padding-bottom: 2px; transition: color 0.2s;" onmouseover="this.style.color='var(--lavender)'" onmouseout="this.style.color='var(--coral-pink)'">
+                            <a href="mailto:asarathe4865@gmail.com" style="color: var(--coral-pink); font-weight: 700; text-decoration: none; font-size: 1rem; border-bottom: 1px dashed var(--coral-pink); padding-bottom: 2px; transition: color 0.2s;">
                                 asarathe4865@gmail.com
                             </a>
                         </div>
@@ -370,7 +366,6 @@
         </div>
     </main>
 
-    <!-- WORKSPACE STUDIO MANAGEMENT HUB -->
     <main id="view-dashboard" class="app-view">
         <div class="dashboard-container">
             <aside class="dash-sidebar">
@@ -388,14 +383,12 @@
                     <ul class="managed-list" id="sidebar-events-list"></ul>
                 </div>
 
-                <!-- Image-based Branding Upload Component Block (Multiple) -->
                 <div class="dash-card liquid-track-wrapper">
                     <h3>Upload Branding Images</h3>
                     <p style="font-size:0.75rem; color:var(--muted-gray); margin-bottom:1.25rem;">Attach continuous rebranding graphics images directly into infinite carousel loop row.</p>
                     <button class="btn-prime" onclick="triggerBrandingImageSelector()">Choose Image Assets</button>
                     <input type="file" id="hidden-branding-img-uploader" accept="image/*" multiple style="display:none;" onchange="handleBrandingImageSelectionStage(event)">
                     
-                    <!-- Dynamic Staging Node Interface for Multiple Files -->
                     <div id="pending-branding-frame-node">
                         <div id="pending-branding-files-list" style="max-height:120px; overflow-y:auto; font-size:0.8rem; font-weight:700; color:var(--coral-pink); display:flex; flex-direction:column; gap:4px; margin-bottom:8px;"></div>
                         <button class="btn-prime" style="background:var(--coral-pink); border-color:var(--coral-pink); color:white;" onclick="commitStagedBrandingImagesToDatabase()">Confirm & Save Guidelines Images</button>
@@ -440,7 +433,6 @@
         <div class="lightbox-content" onclick="event.stopPropagation()"><img id="lightbox-img" src=""></div>
     </div>
 
-    <!-- MAIN CORE RUNTIME FRAMEWORK SCRIPTS -->
     <script>
         let db = null;
         let activeEventId = null;
@@ -461,43 +453,80 @@
             setupGlobalUniversalLiquidEngine();
             setInterval(trackAutomatedFocalBlurEngine, 200);
             
-            enforceUrlParameterPrivacyFilter();
+            // PROCESS URL SHARED INJECTED CLOUD DATA INSTEAD OF LOCAL DB
+            unpackCloudDataFromUrlParameters();
         });
 
-        // Smart Privacy URL Parameter Filter
-        function enforceUrlParameterPrivacyFilter() {
+        // 🚀 GENIUS SYSTEM: URL se deep-staged parameters decode karke screen pe render karna
+        function unpackCloudDataFromUrlParameters() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'public') {
                 document.querySelectorAll(".workspace-nav-node").forEach(el => el.remove());
                 const dashboardContainer = document.getElementById("view-dashboard");
                 if(dashboardContainer) dashboardContainer.remove();
-                
                 isSharingIsolationModeActive = true;
                 switchView('showcase');
-                console.log("AG Secure Engine: Public view enforced via URL param.");
+
+                // Check if cloud matrix payload exists
+                const cloudDataString = urlParams.get('data');
+                if (cloudDataString) {
+                    try {
+                        const cloudPayload = JSON.parse(decodeURIComponent(escape(atob(cloudDataString))));
+                        localStorage.setItem('ag_cloud_events', JSON.stringify(cloudPayload.events || []));
+                        localStorage.setItem('ag_cloud_assets', JSON.stringify(cloudPayload.assets || []));
+                        localStorage.setItem('ag_cloud_branding', JSON.stringify(cloudPayload.branding || []));
+                        console.log("AG Cloud System: Remote assets unpacked successfully.");
+                    } catch (e) {
+                        console.error("Cloud data decoding tracking crash: ", e);
+                    }
+                }
             }
         }
 
-        // AUTOMATED SHARING NOTIFICATION BOX UI
+        // 🔗 SMART LINK PACKAGER GENERATOR ENGINE
         function triggerSmartShareNotificationSystem() {
             const shareWorkspaceToo = confirm("Do you want to share the Workspace Hub too?\n\nClick 'OK' (YES) to share everything.\nClick 'Cancel' (NO) to share ONLY the Portfolio Showcase.");
             const baseWebUrl = window.location.origin + window.location.pathname;
-            let finalShareableLink = "";
 
             if (shareWorkspaceToo) {
-                finalShareableLink = baseWebUrl;
-                spawnMatrixToastNotification("Full Website Link (With Workspace) copied to Clipboard!");
-            } else {
-                finalShareableLink = baseWebUrl + "?view=public";
-                spawnMatrixToastNotification("Secure Portfolio Link (Only Showcase) copied to Clipboard!");
+                navigator.clipboard.writeText(baseWebUrl);
+                spawnMatrixToastNotification("Full Website Link copied to Clipboard!");
+                return;
             }
 
-            navigator.clipboard.writeText(finalShareableLink).catch(err => {
-                console.error("Could not copy string text: ", err);
-            });
+            // Sync structural parameters from Local DB and pack into Base64 format
+            const txEvents = db.transaction(["events"], "readonly").objectStore("events").getAll();
+            txEvents.onsuccess = (e1) => {
+                const eventsList = e1.target.result;
+                const txAssets = db.transaction(["assets"], "readonly").objectStore("assets").getAll();
+                txAssets.onsuccess = (e2) => {
+                    const assetsList = e2.target.result;
+                    const txBrand = db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll();
+                    txBrand.onsuccess = (e3) => {
+                        const brandingList = e3.target.result;
+
+                        const systemStatePackage = {
+                            events: eventsList,
+                            assets: assetsList,
+                            branding: brandingList
+                        };
+
+                        // Convert object payload mapping to cross-platform safe base64 stream
+                        const stringifiedJson = unescape(encodeURIComponent(JSON.stringify(systemStatePackage)));
+                        const base64Payload = btoa(stringifiedJson);
+                        
+                        const finalShareableLink = baseWebUrl + "?view=public&data=" + base64Payload;
+                        
+                        navigator.clipboard.writeText(finalShareableLink).then(() => {
+                            spawnMatrixToastNotification("Secure Share Link (with all Photos) Packed into Clipboard!");
+                        }).catch(err => {
+                            alert("Link too big for standard browsers pipeline. Try sharing default local files mapping.");
+                        });
+                    };
+                };
+            };
         }
 
-        // Dynamic Toast Banner Engine
         function spawnMatrixToastNotification(message) {
             const hub = document.getElementById("global-toast-matrix-hub");
             if(!hub) return;
@@ -549,25 +578,19 @@
         }
 
         function seedDefaultCategories() {
-            const tx = db.transaction(["categories"], "readwrite");
-            const store = tx.objectStore("categories");
-            DEFAULT_CATEGORIES.forEach(c => store.put({ name: c }));
+            const selectElement = document.getElementById("batch-category-select");
+            if(selectElement) selectElement.innerHTML = DEFAULT_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
             
-            tx.oncomplete = () => {
-                const selectElement = document.getElementById("batch-category-select");
-                if(selectElement) selectElement.innerHTML = DEFAULT_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
-                
-                const targetScroller = document.getElementById("static-categories-grid-target");
-                if(targetScroller) {
-                    const chipsHtml = DEFAULT_CATEGORIES.map(c => `
-                        <div class="carousel-item-flat liquid-track-wrapper" onclick="selectSegmentTagScopeFilter('${c}')">
-                            <span>✨ ${c}</span>
-                        </div>
-                    `).join('');
-                    targetScroller.innerHTML = chipsHtml + chipsHtml + chipsHtml;
-                }
-                syncCoreStateEngine();
-            };
+            const targetScroller = document.getElementById("static-categories-grid-target");
+            if(targetScroller) {
+                const chipsHtml = DEFAULT_CATEGORIES.map(c => `
+                    <div class="carousel-item-flat liquid-track-wrapper" onclick="selectSegmentTagScopeFilter('${c}')">
+                        <span>✨ ${c}</span>
+                    </div>
+                `).join('');
+                targetScroller.innerHTML = chipsHtml + chipsHtml + chipsHtml;
+            }
+            syncCoreStateEngine();
         }
 
         function switchView(viewName) {
@@ -616,7 +639,7 @@
 
         function deleteAssetFromWorkspace(id, event) {
             event.stopPropagation();
-            if(!confirm("Are you sure you want to delete this design template from the workspace?")) return;
+            if(!confirm("Are you sure you want to delete this design template?")) return;
             const tx = db.transaction(["assets"], "readwrite");
             tx.objectStore("assets").delete(id);
             tx.oncomplete = () => { 
@@ -626,14 +649,12 @@
         }
 
         function triggerFileInput() { if(!activeEventId) return alert("Activate a workspace room node first."); document.getElementById("hidden-file-input").click(); }
-        
         function setupDragAndDrop() {
             const dz = document.getElementById("upload-dropzone");
             if(!dz) return;
             dz.addEventListener('dragover', (e) => { e.preventDefault(); });
             dz.addEventListener('drop', (e) => { e.preventDefault(); if(activeEventId) processMediaFiles(e.dataTransfer.files); });
         }
-        
         function handleFileSelection(e) { processMediaFiles(e.target.files); }
 
         function processMediaFiles(files) {
@@ -673,17 +694,10 @@
                 const assets = e.target.result;
                 const grid = document.getElementById("workspace-assets-grid");
                 if(!assets.length) { grid.innerHTML = `<div class="empty-indicator">No assets registered under this studio space node yet.</div>`; return; }
-                
                 grid.innerHTML = assets.map(a => `
                     <div class="asset-card">
-                        <div class="asset-preview-box">
-                            <button class="asset-trash-btn" onclick="deleteAssetFromWorkspace(${a.id}, event)" title="Delete image node">&times;</button>
-                            <img src="${a.imageSrc}">
-                        </div>
-                        <div class="asset-mini-details">
-                            <p style="font-weight:700; font-size:0.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:120px;">${a.title}</p>
-                            <span style="font-size:0.7rem; color:var(--coral-pink); font-weight:700;">${a.category}</span>
-                        </div>
+                        <div class="asset-preview-box"><button class="asset-trash-btn" onclick="deleteAssetFromWorkspace(${a.id}, event)">&times;</button><img src="${a.imageSrc}"></div>
+                        <div class="asset-mini-details"><p style="font-weight:700; font-size:0.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:120px;">${a.title}</p><span style="font-size:0.7rem; color:var(--coral-pink); font-weight:700;">${a.category}</span></div>
                     </div>
                 `).join('');
             };
@@ -695,17 +709,26 @@
             targetCanvas.classList.add("active");
             document.getElementById("standalone-page-header-title").innerText = eventName.toUpperCase();
 
-            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBKeyRange.only(parseInt(eventId))).onsuccess = (e) => {
+            const targetDeck = document.getElementById("standalone-cards-fanning-target");
+
+            if (isSharingIsolationModeActive) {
+                const cloudAssets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
+                const filtered = cloudAssets.filter(a => a.eventId === parseInt(eventId));
+                if(!filtered.length) { targetDeck.innerHTML = `<div class="empty-indicator">Empty Room.</div>`; return; }
+                targetDeck.innerHTML = filtered.map((a, index) => `
+                    <div class="medium-liquid-card liquid-track-wrapper" style="animation-delay:${index * 50}ms;" onclick="openLightbox('${a.imageSrc}')">
+                        <div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div>
+                    </div>
+                `).join('');
+                return;
+            }
+
+            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBRange = IDBKeyRange.only(parseInt(eventId))).onsuccess = (e) => {
                 const assets = e.target.result;
-                const targetDeck = document.getElementById("standalone-cards-fanning-target");
                 if(!assets.length) { targetDeck.innerHTML = `<div class="empty-indicator">This project container room is empty.</div>`; return; }
-                
                 targetDeck.innerHTML = assets.map((a, index) => `
                     <div class="medium-liquid-card liquid-track-wrapper" style="animation-delay:${index * 50}ms;" onclick="openLightbox('${a.imageSrc}')">
-                        <div class="card-img-holder">
-                            <img src="${a.imageSrc}">
-                            <div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div>
-                        </div>
+                        <div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div>
                     </div>
                 `).join('');
             };
@@ -716,11 +739,7 @@
             document.getElementById("portfolio-redirected-gallery-canvas").classList.remove("active");
         }
 
-        function selectSegmentTagScopeFilter(catName) {
-            localFilterType = 'category'; localFilterValue = catName;
-            renderGlobalClientShowcasePools();
-        }
-
+        function selectSegmentTagScopeFilter(catName) { localFilterType = 'category'; localFilterValue = catName; renderGlobalClientShowcasePools(); }
         function trackAutomatedFocalBlurEngine() {
             const track = document.getElementById("focused-pool-ticker-inner-track"); if(!track) return;
             const cards = track.querySelectorAll(".medium-liquid-card"); const center = window.innerWidth / 2;
@@ -731,170 +750,128 @@
         }
 
         function renderGlobalClientShowcasePools() {
-            if(!db) return;
+            const innerTrack = document.getElementById("focused-pool-ticker-inner-track");
+            if(!innerTrack) return;
+
+            if (isSharingIsolationModeActive) {
+                let assets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
+                if(localFilterType === 'category') assets = assets.filter(a => a.category === localFilterValue);
+                if(!assets.length) { innerTrack.innerHTML = `<div class="empty-indicator" style="border:none;">No matching designs found.</div>`; return; }
+                const html = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
+                innerTrack.innerHTML = html + html + html;
+                return;
+            }
+
             db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (evEvent) => {
                 const evs = evEvent.target.result; const evMap = {}; evs.forEach(e => evMap[e.id] = e.name);
                 db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
                     let assets = asEvent.target.result;
                     if(localFilterType === 'category') assets = assets.filter(a => a.category === localFilterValue);
                     if(globalSearchTokenString) {
-                        assets = assets.filter(a => 
-                            a.title.toLowerCase().includes(globalSearchTokenString) ||
-                            a.category.toLowerCase().includes(globalSearchTokenString) ||
-                            (evMap[a.eventId] && evMap[a.eventId].toLowerCase().includes(globalSearchTokenString))
-                        );
+                        assets = assets.filter(a => a.title.toLowerCase().includes(globalSearchTokenString) || a.category.toLowerCase().includes(globalSearchTokenString));
                     }
-                    const innerTrack = document.getElementById("focused-pool-ticker-inner-track");
-                    if(!innerTrack) return;
-                    if(!assets.length) { 
-                        innerTrack.innerHTML = `<div class="empty-indicator" style="display:inline-block; width:100vw; border:none; font-weight:500;">No matching designs found in active records space matrix.</div>`; 
-                        return; 
-                    }
-                    const rawCardsHtml = assets.map(a => `
-                        <div class="medium-liquid-card liquid-track-wrapper" id="pool-asset-${a.id}" onclick="openLightbox('${a.imageSrc}')">
-                            <div class="card-img-holder">
-                                <img src="${a.imageSrc}">
-                                <div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div>
-                            </div>
-                        </div>
-                    `).join('');
+                    if(!assets.length) { innerTrack.innerHTML = `<div class="empty-indicator" style="border:none;">No matching designs found.</div>`; return; }
+                    const rawCardsHtml = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
                     innerTrack.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
                 };
             };
         }
 
-        // --- BRANDING MANAGEMENT HUB SYSTEM (MULTIPLE IMAGES TRACK) ---
+        // --- BRANDING MODULE ---
         function triggerBrandingImageSelector() { document.getElementById("hidden-branding-img-uploader").click(); }
-        
         function handleBrandingImageSelectionStage(e) {
-            const files = e.target.files;
-            if(!files.length) return;
-
+            const files = e.target.files; if(!files.length) return;
             cachedPendingBrandingImagesArray = []; 
             const listContainer = document.getElementById("pending-branding-files-list");
             listContainer.innerHTML = ""; 
-
             let loadedCount = 0;
             const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-
-            if(!validFiles.length) return alert("Please select standard graphic image files.");
-
             validFiles.forEach(file => {
-                const r = new FileReader();
-                r.onload = (event) => {
-                    cachedPendingBrandingImagesArray.push({
-                        fileName: file.name,
-                        binary: event.target.result
-                    });
-                    
-                    const fileRow = document.createElement("div");
-                    fileRow.innerText = ` Staged: ${file.name}`;
-                    fileRow.style.overflow = "hidden";
-                    fileRow.style.textOverflow = "ellipsis";
-                    fileRow.style.whiteSpace = "nowrap";
+                const r = new FileReader(); r.onload = (event) => {
+                    cachedPendingBrandingImagesArray.push({ fileName: file.name, binary: event.target.result });
+                    const fileRow = document.createElement("div"); fileRow.innerText = ` Staged: ${file.name}`;
                     listContainer.appendChild(fileRow);
-
-                    loadedCount++;
-                    if (loadedCount === validFiles.length) {
-                        document.getElementById("pending-branding-frame-node").style.display = "flex";
-                        spawnMatrixToastNotification(`${validFiles.length} images staged! Click save.`);
-                    }
+                    if (++loadedCount === validFiles.length) document.getElementById("pending-branding-frame-node").style.display = "flex";
                 };
                 r.readAsDataURL(file);
             });
         }
 
         function commitStagedBrandingImagesToDatabase() {
-            if(!cachedPendingBrandingImagesArray.length || !db) return;
-
             const tx = db.transaction(["rebranding_pdf"], "readwrite");
             const store = tx.objectStore("rebranding_pdf");
-            
-            cachedPendingBrandingImagesArray.forEach(img => {
-                store.add({
-                    fileName: img.fileName,
-                    binary: img.binary,
-                    timestamp: Date.now()
-                });
-            });
-
+            cachedPendingBrandingImagesArray.forEach(img => store.add({ fileName: img.fileName, binary: img.binary, timestamp: Date.now() }));
             tx.oncomplete = () => {
-                const countSaved = cachedPendingBrandingImagesArray.length;
                 cachedPendingBrandingImagesArray = [];
                 document.getElementById("pending-branding-frame-node").style.display = "none";
-                document.getElementById("hidden-branding-img-uploader").value = "";
-                
-                spawnMatrixToastNotification(`${countSaved} Branding Guidelines Images Saved Successfully!`);
+                spawnMatrixToastNotification("Branding Guidelines Images Saved!");
                 renderDashboardBrandingListOnly();
             };
         }
 
         function deleteBrandingVisualRecord(id) {
-            if(!confirm("Evict this branding template layout?")) return;
-            db.transaction(["rebranding_pdf"], "readwrite").objectStore("rebranding_pdf").delete(id).oncomplete = () => {
-                spawnMatrixToastNotification("Branding guidelines layout evicted.");
-                renderDashboardBrandingListOnly();
-            };
+            db.transaction(["rebranding_pdf"], "readwrite").objectStore("rebranding_pdf").delete(id).oncomplete = () => { renderDashboardBrandingListOnly(); };
         }
 
         function renderDashboardBrandingListOnly() {
-            const target = document.getElementById("dashboard-branding-managed-list");
-            if (!target || !db) return;
-
+            const target = document.getElementById("dashboard-branding-managed-list"); if (!target || !db) return;
             db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
                 const images = e.target.result;
-                if(!images.length) { target.innerHTML = `<li style="font-size:0.8rem; color:var(--muted-gray); padding:0.5rem 0;">No reference vectors attached</li>`; return; }
-                target.innerHTML = images.map(i => `<li class="managed-item"><span style="font-size:0.8rem; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px;">🖼️ ${i.fileName}</span><button class="delete-action" onclick="deleteBrandingVisualRecord(${i.id})">&times;</button></li>`).join('');
+                if(!images.length) { target.innerHTML = `<li>No references attached</li>`; return; }
+                target.innerHTML = images.map(i => `<li class="managed-item"><span>🖼️ ${i.fileName}</span><button class="delete-action" onclick="deleteBrandingVisualRecord(${i.id})">&times;</button></li>`).join('');
             };
         }
 
         function renderRebrandingStripShowcaseView() {
+            const target = document.getElementById("portfolio-branding-visuals-append-track"); if(!target) return;
+
+            if (isSharingIsolationModeActive) {
+                const cloudBranding = JSON.parse(localStorage.getItem('ag_cloud_branding') || '[]');
+                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous structural branding visual rules saved.</div>`; return; }
+                const compiledSet = [...cloudBranding, ...cloudBranding, ...cloudBranding];
+                target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
+                return;
+            }
+
             db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
                 const images = e.target.result;
-                const target = document.getElementById("portfolio-branding-visuals-append-track");
-                if(!target) return;
-                if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="width:100vw; border:none;">No continuous structural branding visual rules saved.</div>`; return; }
-                
+                if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural branding visual rules saved.</div>`; return; }
                 const compiledSet = [...images, ...images, ...images];
                 target.innerHTML = compiledSet.map(i => `
                     <div class="brand-visual-card" onclick="openLightbox('${i.binary}')">
-                        <div class="brand-visual-img-container">
-                            <img src="${i.binary}">
-                        </div>
-                        <div class="brand-visual-label">${i.fileName.split('.')[0].replace(/[-_]/g, ' ')}</div>
+                        <div class="brand-visual-img-container"><img src="${i.binary}"></div>
+                        <div class="brand-visual-label">${i.fileName.split('.')[0]}</div>
                     </div>
                 `).join('');
             };
         }
 
         function triggerSmoothStatAnimate(elementId, targetValue) {
-            const el = document.getElementById(elementId);
-            if(!el) return;
-            let current = 0;
-            if(targetValue === 0) { el.innerText = "0"; return; }
-            const duration = 1000; 
-            const steps = Math.min(targetValue, 30);
-            const stepTime = Math.floor(duration / steps);
-            const increment = Math.ceil(targetValue / steps);
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= targetValue) { el.innerText = targetValue; clearInterval(timer); } 
-                else { el.innerText = current; }
-            }, stepTime);
+            const el = document.getElementById(elementId); if(!el) return;
+            el.innerText = targetValue;
         }
 
         function renderClientShowcase() {
-            if(!db) return;
             renderRebrandingStripShowcaseView();
+            const targetGrid = document.getElementById("gallery-redirection-grid-target");
+
+            if (isSharingIsolationModeActive) {
+                const cloudEvents = JSON.parse(localStorage.getItem('ag_cloud_events') || '[]');
+                const cloudAssets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
+                triggerSmoothStatAnimate("stat-events", cloudEvents.length);
+                triggerSmoothStatAnimate("stat-designs", cloudAssets.length);
+                if(targetGrid) {
+                    targetGrid.innerHTML = cloudEvents.map(ev => `<button class="enhanced-room-chip-node liquid-track-wrapper" onclick="navigateToStandaloneGalleryView(${ev.id}, '${ev.name}')"><span class="room-folder-icon">📂</span> ${ev.name}</button>`).join('');
+                }
+                renderGlobalClientShowcasePools();
+                return;
+            }
+
+            if(!db) return;
             db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (e) => {
                 triggerSmoothStatAnimate("stat-events", e.target.result.length);
-                const targetGrid = document.getElementById("gallery-redirection-grid-target");
                 if(targetGrid) {
-                    targetGrid.innerHTML = e.target.result.map(ev => `
-                        <button class="enhanced-room-chip-node liquid-track-wrapper" onclick="navigateToStandaloneGalleryView(${ev.id}, '${ev.name}')">
-                            <span class="room-folder-icon">📂</span> ${ev.name}
-                        </button>
-                    `).join('');
+                    targetGrid.innerHTML = e.target.result.map(ev => `<button class="enhanced-room-chip-node liquid-track-wrapper" onclick="navigateToStandaloneGalleryView(${ev.id}, '${ev.name}')"><span class="room-folder-icon">📂</span> ${ev.name}</button>`).join('');
                 }
                 db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
                     triggerSmoothStatAnimate("stat-designs", asEvent.target.result.length);
