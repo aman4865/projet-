@@ -79,7 +79,7 @@
         }
 
         .logo-group { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-main); cursor: pointer; }
-        .logo-img { width: 36px; height: 36px; object-fit: contain; }
+        .logo-img { width: 100px; height: 100px; object-fit: contain; }
         .logo-text { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--lavender); letter-spacing: -1px; }
 
         .nav-search-bar { flex: 1; max-width: 480px; position: relative; }
@@ -273,9 +273,9 @@
 
     <header class="liquid-track-wrapper">
         <div class="nav-container">
-            <a class="logo-group" onclick="switchView('showcase')">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC80lEQVR4nO3bW08TQRQH8P+2C6wKFYgUkAtqfDA+gD74YHzwXfSJSYwPTfS9idH4gAkGidGgBhIuN7VAsbSllLbbg/Owy67bLgXbAon/X9vZnZ0vO7NndmY3gGEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhsk97Xb7GIAL9w8NfQfAZmttvVwub9fr9Yf9fv9xNpu9G41G96PR6HE8Hj+Kx+OH9Xp9PhwO7w+Hw6v9fF69v66uV6fT+dzr9Z7MZfW6Wv18eXm5DGB9vI2NjfVcLreTy+VWMpnMciaTWezpNdfV9Wwms9T6uPZ4N9fG+vY1p7z+ZunX/F6zL6tV8vX09U1YtPjrDQwAAAABJRU5CYII=" alt="AG Logo" class="logo-img">
-                <span class="logo-text">AG</span>
+            <a class="logo-group" onclick="resetFiltersAndSwitch('showcase')">
+                <img src="./logo_transparent.png" alt="AG Logo" class="logo-img">
+                <!-- <span class="logo-text">AG</span> -->
             </a>
             
             <div class="nav-search-bar">
@@ -284,8 +284,7 @@
             </div>
 
             <nav class="nav-links" id="main-navigation-menu-bar">
-                <a id="nav-showcase" class="active" onclick="switchView('showcase')">Portfolio</a>
-                <!-- Added secure click handler for Dashboard protection locker -->
+                <a id="nav-showcase" class="active" onclick="resetFiltersAndSwitch('showcase')">Portfolio</a>
                 <a id="nav-dashboard" class="workspace-nav-node" onclick="validateAdminAccessGateThenSwitch()">Workspace Hub</a>
                 <a id="nav-share-popup" style="color:var(--coral-pink); font-weight:800; cursor:pointer;" onclick="triggerSmartShareNotificationSystem()">🔗 Share Portfolio</a>
                 <button class="theme-toggle-btn" onclick="toggleGlobalThemeEngine()">🌓</button>
@@ -443,7 +442,7 @@
         let localFilterValue = 'all';
         let cachedPendingBrandingImagesArray = []; 
         let isSharingIsolationModeActive = false;
-        let isSessionAdminUnlocked = false; // Admin Lock parameter string tracking
+        let isSessionAdminUnlocked = false; 
 
         const DEFAULT_CATEGORIES = ["Posters", "Standees", "Certificates", "ID Cards", "Bands", "Selfie Points", "Branding", "Backdrops"];
 
@@ -459,13 +458,11 @@
             enforceUrlParameterPrivacyFilter();
         });
 
-        // 🔒 ADMIN GATEWAY LOCK SYSTEM
         function validateAdminAccessGateThenSwitch() {
             if (isSessionAdminUnlocked) {
                 switchView('dashboard');
                 return;
             }
-            
             const accessPinCodeInput = prompt("🔒 Access Denied! Enter Secret Admin PIN to open Workspace Hub panel:");
             if (accessPinCodeInput === "4865") {
                 isSessionAdminUnlocked = true;
@@ -476,7 +473,6 @@
             }
         }
 
-        // Smart Privacy URL Parameter Filter
         function enforceUrlParameterPrivacyFilter() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'public') {
@@ -501,7 +497,6 @@
             }
         }
 
-        // 🔗 SMART LINK PACKAGER GENERATOR ENGINE
         function triggerSmartShareNotificationSystem() {
             const shareWorkspaceToo = confirm("Do you want to share the Workspace Hub too?\n\nClick 'OK' (YES) to share everything.\nClick 'Cancel' (NO) to share ONLY the Portfolio Showcase.");
             const baseWebUrl = window.location.origin + window.location.pathname;
@@ -534,13 +529,22 @@
                         const finalShareableLink = baseWebUrl + "?view=public&data=" + base64Payload;
                         
                         navigator.clipboard.writeText(finalShareableLink).then(() => {
-                            spawnMatrixToastNotification("Secure Share Link (with all Photos) Packed into Clipboard!");
+                            spawnMatrixToastNotification("Secure Share Link Packed into Clipboard!");
                         }).catch(err => {
-                            alert("Link too big for standard browsers pipeline. Try sharing default local files mapping.");
+                            alert("Link packaging failed mapping process.");
                         });
                     };
                 };
             };
+        }
+
+        function resetFiltersAndSwitch(viewName) {
+            localFilterType = 'all';
+            localFilterValue = 'all';
+            globalSearchTokenString = '';
+            const searchInput = document.getElementById("global-search-input");
+            if(searchInput) searchInput.value = '';
+            switchView(viewName);
         }
 
         function spawnMatrixToastNotification(message) {
@@ -635,7 +639,7 @@
             if (!input.value.trim()) return;
             db.transaction(["events"], "readwrite").objectStore("events").add({ name: input.value.trim(), timestamp: Date.now() }).onsuccess = (e) => {
                 activeEventId = e.target.result; input.value = ""; 
-                spawnMatrixToastNotification("Workspace Room Node Added Successfully!");
+                spawnMatrixToastNotification("Workspace Room Node Added!");
                 syncCoreStateEngine();
             };
         }
@@ -643,31 +647,23 @@
         function selectWorkspace(id) { activeEventId = id; renderDashboardWorkspaces(); }
 
         function deleteEventWorkspace(id, event) {
-            event.stopPropagation(); if(!confirm("Delete this workspace room node?")) return;
+            event.stopPropagation(); if(!confirm("Delete workspace?")) return;
             const tx = db.transaction(["events", "assets"], "readwrite");
             tx.objectStore("events").delete(id);
             tx.oncomplete = () => { 
                 if(activeEventId === id) activeEventId = null; 
-                spawnMatrixToastNotification("Workspace Removed Node.");
                 syncCoreStateEngine(); 
             };
         }
 
         function deleteAssetFromWorkspace(id, event) {
-            event.stopPropagation();
-            if(!confirm("Are you sure you want to delete this design template?")) return;
-            const tx = db.transaction(["assets"], "readwrite");
-            tx.objectStore("assets").delete(id);
-            tx.oncomplete = () => { 
-                spawnMatrixToastNotification("Design Template Deleted.");
-                syncCoreStateEngine(); 
-            };
+            event.stopPropagation(); if(!confirm("Delete asset?")) return;
+            db.transaction(["assets"], "readwrite").objectStore("assets").delete(id).oncomplete = () => { syncCoreStateEngine(); };
         }
 
-        function triggerFileInput() { if(!activeEventId) return alert("Activate a workspace room node first."); document.getElementById("hidden-file-input").click(); }
+        function triggerFileInput() { if(!activeEventId) return alert("Activate a workspace room."); document.getElementById("hidden-file-input").click(); }
         function setupDragAndDrop() {
-            const dz = document.getElementById("upload-dropzone");
-            if(!dz) return;
+            const dz = document.getElementById("upload-dropzone"); if(!dz) return;
             dz.addEventListener('dragover', (e) => { e.preventDefault(); });
             dz.addEventListener('drop', (e) => { e.preventDefault(); if(activeEventId) processMediaFiles(e.dataTransfer.files); });
         }
@@ -680,10 +676,7 @@
             arr.forEach(file => {
                 const r = new FileReader(); r.onload = (e) => {
                     db.transaction(["assets"], "readwrite").objectStore("assets").add({ eventId: parseInt(activeEventId), title: file.name.split('.')[0].replace(/[-_]/g, ' '), category: cat, imageSrc: e.target.result, timestamp: Date.now() });
-                    if(++loaded === arr.length) {
-                        spawnMatrixToastNotification(`${loaded} Assets Staged Successfully!`);
-                        syncCoreStateEngine();
-                    }
+                    if(++loaded === arr.length) syncCoreStateEngine();
                 };
                 r.readAsDataURL(file);
             });
@@ -692,30 +685,22 @@
         function renderDashboardWorkspaces() {
             if(!db || document.getElementById("view-dashboard") === null) return;
             db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (e) => {
-                const events = e.target.result;
-                const list = document.getElementById("sidebar-events-list");
+                const events = e.target.result; const list = document.getElementById("sidebar-events-list");
                 if(!events.length) { list.innerHTML = `<li class="empty-indicator">No workspaces cataloged.</li>`; return; }
                 if(activeEventId === null) activeEventId = events[0].id;
                 list.innerHTML = events.map(ev => `<li class="managed-item ${ev.id === activeEventId?'active':''}" onclick="selectWorkspace(${ev.id})"><span>${ev.name}</span><button class="delete-action" onclick="deleteEventWorkspace(${ev.id}, event)">&times;</button></li>`).join('');
                 const current = events.find(ev => ev.id === activeEventId);
                 if(current) document.getElementById("current-workspace-title").innerText = current.name;
-                renderDashboardAssets();
-                renderDashboardBrandingListOnly();
+                renderDashboardAssets(); renderDashboardBrandingListOnly();
             };
         }
 
         function renderDashboardAssets() {
             if(!activeEventId || document.getElementById("workspace-assets-grid") === null) return;
             db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBKeyRange.only(parseInt(activeEventId))).onsuccess = (e) => {
-                const assets = e.target.result;
-                const grid = document.getElementById("workspace-assets-grid");
-                if(!assets.length) { grid.innerHTML = `<div class="empty-indicator">No assets registered under this studio space node yet.</div>`; return; }
-                grid.innerHTML = assets.map(a => `
-                    <div class="asset-card">
-                        <div class="asset-preview-box"><button class="asset-trash-btn" onclick="deleteAssetFromWorkspace(${a.id}, event)">&times;</button><img src="${a.imageSrc}"></div>
-                        <div class="asset-mini-details"><p style="font-weight:700; font-size:0.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:120px;">${a.title}</p><span style="font-size:0.7rem; color:var(--coral-pink); font-weight:700;">${a.category}</span></div>
-                    </div>
-                `).join('');
+                const assets = e.target.result; const grid = document.getElementById("workspace-assets-grid");
+                if(!assets.length) { grid.innerHTML = `<div class="empty-indicator">No assets registered.</div>`; return; }
+                grid.innerHTML = assets.map(a => `<div class="asset-card"><div class="asset-preview-box"><button class="asset-trash-btn" onclick="deleteAssetFromWorkspace(${a.id}, event)">&times;</button><img src="${a.imageSrc}"></div><div class="asset-mini-details"><p style="font-weight:700; font-size:0.85rem;">${a.title}</p><span style="font-size:0.7rem; color:var(--coral-pink); font-weight:700;">${a.category}</span></div></div>`).join('');
             };
         }
 
@@ -724,29 +709,20 @@
             const targetCanvas = document.getElementById("portfolio-redirected-gallery-canvas");
             targetCanvas.classList.add("active");
             document.getElementById("standalone-page-header-title").innerText = eventName.toUpperCase();
-
             const targetDeck = document.getElementById("standalone-cards-fanning-target");
 
             if (isSharingIsolationModeActive) {
                 const cloudAssets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
                 const filtered = cloudAssets.filter(a => a.eventId === parseInt(eventId));
                 if(!filtered.length) { targetDeck.innerHTML = `<div class="empty-indicator">Empty Room.</div>`; return; }
-                targetDeck.innerHTML = filtered.map((a, index) => `
-                    <div class="medium-liquid-card liquid-track-wrapper" style="animation-delay:${index * 50}ms;" onclick="openLightbox('${a.imageSrc}')">
-                        <div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div>
-                    </div>
-                `).join('');
+                targetDeck.innerHTML = filtered.map((a, index) => `<div class="medium-liquid-card liquid-track-wrapper" style="animation-delay:${index * 50}ms;" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
                 return;
             }
 
-            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBRange = IDBKeyRange.only(parseInt(eventId))).onsuccess = (e) => {
+            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBKeyRange.only(parseInt(eventId))).onsuccess = (e) => {
                 const assets = e.target.result;
                 if(!assets.length) { targetDeck.innerHTML = `<div class="empty-indicator">This project container room is empty.</div>`; return; }
-                targetDeck.innerHTML = assets.map((a, index) => `
-                    <div class="medium-liquid-card liquid-track-wrapper" style="animation-delay:${index * 50}ms;" onclick="openLightbox('${a.imageSrc}')">
-                        <div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div>
-                    </div>
-                `).join('');
+                targetDeck.innerHTML = assets.map((a, index) => `<div class="medium-liquid-card liquid-track-wrapper" style="animation-delay:${index * 50}ms;" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
             };
         }
 
@@ -755,7 +731,12 @@
             document.getElementById("portfolio-redirected-gallery-canvas").classList.remove("active");
         }
 
-        function selectSegmentTagScopeFilter(catName) { localFilterType = 'category'; localFilterValue = catName; renderGlobalClientShowcasePools(); }
+        function selectSegmentTagScopeFilter(catName) { 
+            localFilterType = 'category'; 
+            localFilterValue = catName; 
+            renderGlobalClientShowcasePools(); 
+        }
+        
         function trackAutomatedFocalBlurEngine() {
             const track = document.getElementById("focused-pool-ticker-inner-track"); if(!track) return;
             const cards = track.querySelectorAll(".medium-liquid-card"); const center = window.innerWidth / 2;
@@ -765,42 +746,72 @@
             });
         }
 
+        // 🛠️ UPGRADED CORE SEARCH & FILTER ENGINE FOR BOTH CORES
         function renderGlobalClientShowcasePools() {
             const innerTrack = document.getElementById("focused-pool-ticker-inner-track");
             if(!innerTrack) return;
 
-            if (isSharingIsolationModeActive) {
-                let assets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
-                if(localFilterType === 'category') assets = assets.filter(a => a.category === localFilterValue);
-                if(!assets.length) { innerTrack.innerHTML = `<div class="empty-indicator" style="border:none;">No matching designs found.</div>`; return; }
-                const html = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
-                innerTrack.innerHTML = html + html + html;
-                return;
-            }
+            // Gather standard structures mapping arrays
+            let rawAssets = [];
+            let evMap = {};
 
-            db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (evEvent) => {
-                const evs = evEvent.target.result; const evMap = {}; evs.forEach(e => evMap[e.id] = e.name);
-                db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
-                    let assets = asEvent.target.result;
-                    if(localFilterType === 'category') assets = assets.filter(a => a.category === localFilterValue);
-                    if(globalSearchTokenString) {
-                        assets = assets.filter(a => a.title.toLowerCase().includes(globalSearchTokenString) || a.category.toLowerCase().includes(globalSearchTokenString));
-                    }
-                    if(!assets.length) { innerTrack.innerHTML = `<div class="empty-indicator" style="border:none;">No matching designs found.</div>`; return; }
-                    const rawCardsHtml = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
-                    innerTrack.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
+            if (isSharingIsolationModeActive) {
+                rawAssets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
+                const cloudEvents = JSON.parse(localStorage.getItem('ag_cloud_events') || '[]');
+                cloudEvents.forEach(e => evMap[e.id] = e.name);
+                processFilteringAndRender(rawAssets, evMap, innerTrack);
+            } else {
+                if(!db) return;
+                db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (evEvent) => {
+                    evEvent.target.result.forEach(e => evMap[e.id] = e.name);
+                    db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
+                        rawAssets = asEvent.target.result;
+                        processFilteringAndRender(rawAssets, evMap, innerTrack);
+                    };
                 };
-            };
+            }
         }
 
-        // --- BRANDING MODULE ---
+        function processFilteringAndRender(assets, evMap, trackNode) {
+            // Apply category filter logic scope
+            if(localFilterType === 'category') {
+                assets = assets.filter(a => a.category.toLowerCase() === localFilterValue.toLowerCase());
+            }
+            
+            // Apply text query search filtering structure (matches event titles + category)
+            if(globalSearchTokenString) {
+                assets = assets.filter(a => {
+                    const matchedTitle = a.title.toLowerCase().includes(globalSearchTokenString);
+                    const matchedCategory = a.category.toLowerCase().includes(globalSearchTokenString);
+                    const matchedRoomEvent = evMap[a.eventId] && evMap[a.eventId].toLowerCase().includes(globalSearchTokenString);
+                    return matchedTitle || matchedCategory || matchedRoomEvent;
+                });
+            }
+
+            if(!assets.length) { 
+                trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No creative graphics matching layout scope found.</div>`; 
+                return; 
+            }
+
+            const rawCardsHtml = assets.map(a => `
+                <div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')">
+                    <div class="card-img-holder">
+                        <img src="${a.imageSrc}">
+                        <div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            trackNode.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
+        }
+
+        // --- BRANDING SYSTEM MAP ---
         function triggerBrandingImageSelector() { document.getElementById("hidden-branding-img-uploader").click(); }
         function handleBrandingImageSelectionStage(e) {
             const files = e.target.files; if(!files.length) return;
             cachedPendingBrandingImagesArray = []; 
             const listContainer = document.getElementById("pending-branding-files-list");
-            listContainer.innerHTML = ""; 
-            let loadedCount = 0;
+            listContainer.innerHTML = ""; let loadedCount = 0;
             const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
             validFiles.forEach(file => {
                 const r = new FileReader(); r.onload = (event) => {
@@ -820,7 +831,6 @@
             tx.oncomplete = () => {
                 cachedPendingBrandingImagesArray = [];
                 document.getElementById("pending-branding-frame-node").style.display = "none";
-                spawnMatrixToastNotification("Branding Guidelines Images Saved!");
                 renderDashboardBrandingListOnly();
             };
         }
@@ -843,7 +853,7 @@
 
             if (isSharingIsolationModeActive) {
                 const cloudBranding = JSON.parse(localStorage.getItem('ag_cloud_branding') || '[]');
-                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous structural branding visual rules saved.</div>`; return; }
+                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural branding graphics rules mapping found.</div>`; return; }
                 const compiledSet = [...cloudBranding, ...cloudBranding, ...cloudBranding];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
                 return;
@@ -853,9 +863,7 @@
                 const images = e.target.result;
                 if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural branding visual rules saved.</div>`; return; }
                 const compiledSet = [...images, ...images, ...images];
-                target.innerHTML = compiledSet.map(i => `
-                    <div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>
-                `).join('');
+                target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
             };
         }
 
@@ -893,7 +901,7 @@
             };
         }
         function openLightbox(src) { document.getElementById("lightbox-img").src = src; document.getElementById("global-lightbox").classList.add("active"); }
-        function closeLightbox() { document.getElementById("global-lightbox").remove ? document.getElementById("global-lightbox").classList.remove("active") : document.getElementById("global-lightbox").classList.remove("active"); }
+        function closeLightbox() { document.getElementById("global-lightbox").classList.remove("active"); }
     </script>
 </body>
 </html>
