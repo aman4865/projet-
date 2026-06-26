@@ -79,7 +79,7 @@
         }
 
         .logo-group { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-main); cursor: pointer; }
-        .logo-img { width: 100px; height: 100px; object-fit: contain; }
+        .logo-img { width: 36px; height: 36px; object-fit: contain; }
         .logo-text { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--lavender); letter-spacing: -1px; }
 
         .nav-search-bar { flex: 1; max-width: 480px; position: relative; }
@@ -274,8 +274,8 @@
     <header class="liquid-track-wrapper">
         <div class="nav-container">
             <a class="logo-group" onclick="resetFiltersAndSwitch('showcase')">
-                <img src="./logo_transparent.png" alt="AG Logo" class="logo-img">
-                <!-- <span class="logo-text">AG</span> -->
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC80lEQVR4nO3bW08TQRQH8P+2C6wKFYgUkAtqfDA+gD74YHzwXfSJSYwPTfS9idH4gAkGidGgBhIuN7VAsbSllLbbg/Owy67bLgXbAon/X9vZnZ0vO7NndmY3gGEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhsk97Xb7GIAL9w8NfQfAZmttvVwub9fr9Yf9fv9xNpu9G41G96PR6HE8Hj+Kx+OH9Xp9PhwO7w+Hw6v9fF69v66uV6fT+dzr9Z7MZfW6Wv18eXm5DGB9vI2NjfVcLreTy+VWMpnMciaTWezpNdfV9Wwms9T6uPZ4N9fG+vY1p7z+ZunX/F6zL6tV8vX09U1YtPjrDQwAAAABJRU5CYII=" alt="AG Logo" class="logo-img">
+                <span class="logo-text">AG</span>
             </a>
             
             <div class="nav-search-bar">
@@ -286,7 +286,7 @@
             <nav class="nav-links" id="main-navigation-menu-bar">
                 <a id="nav-showcase" class="active" onclick="resetFiltersAndSwitch('showcase')">Portfolio</a>
                 <a id="nav-dashboard" class="workspace-nav-node" onclick="validateAdminAccessGateThenSwitch()">Workspace Hub</a>
-                <a id="nav-share-popup" style="color:var(--coral-pink); font-weight:800; cursor:pointer;" onclick="triggerSmartShareNotificationSystem()">🔗 Share Portfolio</a>
+                <a id="nav-share-popup" class="workspace-nav-node" style="color:var(--coral-pink); font-weight:800; cursor:pointer;" onclick="triggerSmartShareNotificationSystem()">🔗 Share Portfolio</a>
                 <button class="theme-toggle-btn" onclick="toggleGlobalThemeEngine()">🌓</button>
             </nav>
         </div>
@@ -425,7 +425,7 @@
     </main>
 
     <footer class="liquid-track-wrapper">
-        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with Secure Client Link Sync Engine.</p>
+        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with Integrated Key Cloud Infrastructure.</p>
     </footer>
 
     <div class="lightbox" id="global-lightbox" onclick="closeLightbox()">
@@ -475,64 +475,65 @@
             }
         }
 
-        // UNPACK SECURE base64 HYBRID STRING PARAMS WITHOUT FAILURES
-        function enforceUrlParameterPrivacyFilter() {
+        // FETCH REMOTE DATA VIA ANONYMOUS KEY-VALUE CLOUD SYNC
+        async function enforceUrlParameterPrivacyFilter() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'public') {
+                // Completely strip management/sharing controls for visitors
                 document.querySelectorAll(".workspace-nav-node").forEach(el => el.remove());
                 const dashboardContainer = document.getElementById("view-dashboard");
                 if(dashboardContainer) dashboardContainer.remove();
+                
                 isSharingIsolationModeActive = true;
                 switchView('showcase');
                 
-                const remoteBackupStream = urlParams.get('data');
-                if (remoteBackupStream) {
+                const cloudKeyId = urlParams.get('id');
+                if (cloudKeyId) {
                     try {
-                        const parsedData = JSON.parse(decodeURIComponent(escape(atob(remoteBackupStream))));
-                        localStorage.setItem('ag_cloud_events', JSON.stringify(parsedData.events || []));
-                        localStorage.setItem('ag_cloud_assets', JSON.stringify(parsedData.assets || []));
-                        localStorage.setItem('ag_cloud_branding', JSON.stringify(parsedData.branding || []));
-                        renderClientShowcase();
+                        const response = await fetch(`https://api.keyvalue.xyz/${cloudKeyId}/agportfolio`);
+                        const cloudPayload = await response.json();
+                        if (cloudPayload) {
+                            localStorage.setItem('ag_cloud_events', JSON.stringify(cloudPayload.events || []));
+                            localStorage.setItem('ag_cloud_assets', JSON.stringify(cloudPayload.assets || []));
+                            localStorage.setItem('ag_cloud_branding', JSON.stringify(cloudPayload.branding || []));
+                            renderClientShowcase();
+                        }
                     } catch(err) {
-                        console.log("Error unpack loop pipeline context.");
+                        console.log("Cloud stream pipeline down.");
                     }
                 }
             }
         }
 
-        // 🔗 ADVANCED ENCRYPTED HYBRID LIGHTWEIGHT SYSTEM
+        // 🔗 100% FIXED SHORT LINK GENERATOR ENGINE
         async function triggerSmartShareNotificationSystem() {
-            const shareWorkspaceToo = confirm("Do you want to share the Workspace Hub too?\n\nClick 'OK' (YES) to share everything.\nClick 'Cancel' (NO) to share ONLY the Portfolio Showcase.");
             const baseWebUrl = window.location.origin + window.location.pathname;
-
-            if (shareWorkspaceToo) {
-                navigator.clipboard.writeText(baseWebUrl);
-                spawnMatrixToastNotification("Full Website Link copied to Clipboard!");
-                return;
-            }
-
-            spawnMatrixToastNotification("Preparing clean encrypted share link...");
+            spawnMatrixToastNotification("Synchronizing graphics assets with secure cloud system...");
             
             const eventsList = await new Promise(res => db.transaction(["events"],"readonly").objectStore("events").getAll().onsuccess = e => res(e.target.result));
             const assetsList = await new Promise(res => db.transaction(["assets"],"readonly").objectStore("assets").getAll().onsuccess = e => res(e.target.result));
             const brandingList = await new Promise(res => db.transaction(["rebranding_pdf"],"readonly").objectStore("rebranding_pdf").getAll().onsuccess = e => res(e.target.result));
 
-            // Optimize footprint size maps before serializing string
-            const compressedAssets = assetsList.map(a => ({ eventId: a.eventId, title: a.title, category: a.category, imageSrc: a.imageSrc }));
-            const compressedBranding = brandingList.map(b => ({ fileName: b.fileName, binary: b.binary }));
-
-            const payloadObject = { events: eventsList, assets: compressedAssets, branding: compressedBranding };
+            const payloadObject = { events: eventsList, assets: assetsList, branding: brandingList };
 
             try {
-                const stringifiedJson = unescape(encodeURIComponent(JSON.stringify(payloadObject)));
-                const base64Payload = btoa(stringifiedJson);
+                // Fire KeyValue generation without interactive confirmations
+                const tokenGenResponse = await fetch('https://api.keyvalue.xyz/new', { method: 'POST' });
+                const tokenEndpointUrl = await tokenGenResponse.text(); 
+                const cloudKeyId = tokenEndpointUrl.split('/').pop().trim();
+
+                await fetch(`https://api.keyvalue.xyz/${cloudKeyId}/agportfolio`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payloadObject)
+                });
                 
-                const cleanShortLink = baseWebUrl + "?view=public&data=" + base64Payload;
-                navigator.clipboard.writeText(cleanShortLink);
-                spawnMatrixToastNotification("✨ Clean Share Link Copied to Clipboard!");
+                const pristineCleanShortLink = baseWebUrl + "?view=public&id=" + cloudKeyId;
+                navigator.clipboard.writeText(pristineCleanShortLink);
+                spawnMatrixToastNotification("✨ Clean Short Link Copied to Clipboard!");
             } catch(e) {
                 navigator.clipboard.writeText(baseWebUrl + "?view=public");
-                spawnMatrixToastNotification("Standard public view link copied.");
+                spawnMatrixToastNotification("Public url fallback generated.");
             }
         }
 
@@ -592,7 +593,6 @@
             localStorage.setItem('ag-theme', targetMode);
         }
 
-        /* --- LOGIC RE-ALIGNMENT PATCH OPERATIONS --- */
         function executeLiveSystemSearch(event) {
             globalSearchTokenString = event.target.value.toLowerCase().trim();
             renderGlobalClientShowcasePools();
@@ -669,12 +669,12 @@
             const cat = document.getElementById("batch-category-select").value;
             let loaded = 0; const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
             if(!arr.length) return;
-            spawnMatrixToastNotification("Uploading assets to cloud database...");
+            spawnMatrixToastNotification("Uploading assets to cloud database framework...");
             arr.forEach(file => {
                 const r = new FileReader(); r.onload = async (e) => {
                     const cloudUrl = await uploadImageToImgBB(e.target.result);
                     db.transaction(["assets"], "readwrite").objectStore("assets").add({ eventId: parseInt(activeEventId), title: file.name.split('.')[0].replace(/[-_]/g, ' '), category: cat, imageSrc: cloudUrl, timestamp: Date.now() });
-                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets saved to cloud!"); syncCoreStateEngine(); }
+                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets saved directly!"); syncCoreStateEngine(); }
                 };
                 r.readAsDataURL(file);
             });
@@ -768,7 +768,7 @@
                     return matchedTitle || matchedCategory || matchedRoomEvent;
                 });
             }
-            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No creative graphics found.</div>`; return; }
+            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No designs registered.</div>`; return; }
             const rawCardsHtml = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
             trackNode.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
         }
@@ -778,7 +778,7 @@
             const files = e.target.files; if(!files.length) return;
             cachedPendingBrandingImagesArray = []; const listContainer = document.getElementById("pending-branding-files-list");
             listContainer.innerHTML = ""; let loadedCount = 0; const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-            spawnMatrixToastNotification("Staging structural layout components...");
+            spawnMatrixToastNotification("Staging structural guidelines rules...");
             validFiles.forEach(file => {
                 const r = new FileReader(); r.onload = async (event) => {
                     const cloudUrl = await uploadImageToImgBB(event.target.result);
@@ -810,13 +810,13 @@
             const target = document.getElementById("portfolio-branding-visuals-append-track"); if(!target) return;
             if (isSharingIsolationModeActive) {
                 const cloudBranding = JSON.parse(localStorage.getItem('ag_cloud_branding') || '[]');
-                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural branding guidelines rules found.</div>`; return; }
+                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous structural visual rules found.</div>`; return; }
                 const compiledSet = [...cloudBranding, ...cloudBranding, ...cloudBranding];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
                 return;
             }
             db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
-                const images = e.target.result; if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural branding visual rules saved.</div>`; return; }
+                const images = e.target.result; if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural visual rules saved.</div>`; return; }
                 const compiledSet = [...images, ...images, ...images];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
             };
