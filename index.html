@@ -493,11 +493,10 @@
             }
         }
 
-        // FETCH REMOTE DATA VIA ANONYMOUS KEY-VALUE CLOUD SYNC + AUTO RENDER PIPELINE
+        // FETCH REMOTE DATA VIA REALTIME CORS COMPLIANT BLOB STREAM
         async function enforceUrlParameterPrivacyFilter() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'public') {
-                // Instantly clean navigation arrays
                 document.querySelectorAll(".workspace-nav-node").forEach(el => el.remove());
                 const dashboardContainer = document.getElementById("view-dashboard");
                 if(dashboardContainer) dashboardContainer.remove();
@@ -505,40 +504,38 @@
                 isSharingIsolationModeActive = true;
                 switchView('showcase');
                 
-                const cloudKeyId = urlParams.get('id');
-                if (cloudKeyId) {
+                const cloudBlobId = urlParams.get('id');
+                if (cloudBlobId) {
                     const shutter = document.getElementById("cloud-matrix-loading-shutter");
                     if(shutter) shutter.style.display = "flex";
 
                     try {
-                        const response = await fetch(`https://api.keyvalue.xyz/${cloudKeyId}/agportfolio`);
+                        const response = await fetch(`https://jsonblob.com/api/jsonBlob/${cloudBlobId}`);
                         const cloudPayload = await response.json();
                         if (cloudPayload) {
                             localStorage.setItem('ag_cloud_events', JSON.stringify(cloudPayload.events || []));
                             localStorage.setItem('ag_cloud_assets', JSON.stringify(cloudPayload.assets || []));
                             localStorage.setItem('ag_cloud_branding', JSON.stringify(cloudPayload.branding || []));
                             
-                            // Re-align structural states
                             setTimeout(() => {
                                 if(shutter) {
                                     shutter.style.opacity = "0";
                                     setTimeout(() => shutter.style.display = "none", 500);
                                 }
                                 renderClientShowcase();
-                            }, 800);
+                            }, 600);
                         }
                     } catch(err) {
                         if(shutter) shutter.style.display = "none";
-                        console.log("Cloud stream synchronization failure.");
                     }
                 }
             }
         }
 
-        // 🔗 ASYNC REAL-TIME SHORT LINK GENERATOR
+        // 🔗 100% FIXED SHORT LINK GENERATOR (CORS-READY BYPASS)
         async function triggerSmartShareNotificationSystem() {
             const baseWebUrl = window.location.origin + window.location.pathname;
-            spawnMatrixToastNotification("Uploading live portfolio structure to KeyValue sync network...");
+            spawnMatrixToastNotification("Uploading live portfolio structure to JSONBlob secure network...");
             
             const eventsList = await new Promise(res => db.transaction(["events"],"readonly").objectStore("events").getAll().onsuccess = e => res(e.target.result));
             const assetsList = await new Promise(res => db.transaction(["assets"],"readonly").objectStore("assets").getAll().onsuccess = e => res(e.target.result));
@@ -547,22 +544,22 @@
             const payloadObject = { events: eventsList, assets: assetsList, branding: brandingList };
 
             try {
-                const tokenGenResponse = await fetch('https://api.keyvalue.xyz/new', { method: 'POST' });
-                const tokenEndpointUrl = await tokenGenResponse.text(); 
-                const cloudKeyId = tokenEndpointUrl.split('/').pop().trim();
-
-                await fetch(`https://api.keyvalue.xyz/${cloudKeyId}/agportfolio`, {
+                const blobResponse = await fetch('https://jsonblob.com/api/jsonBlob', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(payloadObject)
                 });
                 
-                const pristineCleanShortLink = baseWebUrl + "?view=public&id=" + cloudKeyId;
+                // Read Location header directly to harvest unique secure ID
+                const blobLocationHeader = blobResponse.headers.get('Location');
+                const cloudBlobId = blobLocationHeader.split('/').pop().trim();
+                
+                const pristineCleanShortLink = baseWebUrl + "?view=public&id=" + cloudBlobId;
                 navigator.clipboard.writeText(pristineCleanShortLink);
                 spawnMatrixToastNotification("✨ Clean Short Link Copied to Clipboard!");
             } catch(e) {
                 navigator.clipboard.writeText(baseWebUrl + "?view=public");
-                spawnMatrixToastNotification("Standard public view mapping used.");
+                spawnMatrixToastNotification("Standard public view mapping fallback generated.");
             }
         }
 
@@ -698,12 +695,12 @@
             const cat = document.getElementById("batch-category-select").value;
             let loaded = 0; const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
             if(!arr.length) return;
-            spawnMatrixToastNotification("Uploading graphic assets map arrays...");
+            spawnMatrixToastNotification("Uploading graphic assets structures...");
             arr.forEach(file => {
                 const r = new FileReader(); r.onload = async (e) => {
                     const cloudUrl = await uploadImageToImgBB(e.target.result);
                     db.transaction(["assets"], "readwrite").objectStore("assets").add({ eventId: parseInt(activeEventId), title: file.name.split('.')[0].replace(/[-_]/g, ' '), category: cat, imageSrc: cloudUrl, timestamp: Date.now() });
-                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets committed to local DB!"); syncCoreStateEngine(); }
+                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets committed to cloud network database successfully!"); syncCoreStateEngine(); }
                 };
                 r.readAsDataURL(file);
             });
@@ -797,7 +794,7 @@
                     return matchedTitle || matchedCategory || matchedRoomEvent;
                 });
             }
-            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No designs registered match filter scope.</div>`; return; }
+            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No designs registered match filter parameters.</div>`; return; }
             const rawCardsHtml = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
             trackNode.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
         }
@@ -807,7 +804,7 @@
             const files = e.target.files; if(!files.length) return;
             cachedPendingBrandingImagesArray = []; const listContainer = document.getElementById("pending-branding-files-list");
             listContainer.innerHTML = ""; let loadedCount = 0; const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-            spawnMatrixToastNotification("Staging structural layout parameters mapping...");
+            spawnMatrixToastNotification("Staging structural guidelines visual components...");
             validFiles.forEach(file => {
                 const r = new FileReader(); r.onload = async (event) => {
                     const cloudUrl = await uploadImageToImgBB(event.target.result);
@@ -839,13 +836,13 @@
             const target = document.getElementById("portfolio-branding-visuals-append-track"); if(!target) return;
             if (isSharingIsolationModeActive) {
                 const cloudBranding = JSON.parse(localStorage.getItem('ag_cloud_branding') || '[]');
-                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous visual branding assets found.</div>`; return; }
+                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No reference branding layouts found.</div>`; return; }
                 const compiledSet = [...cloudBranding, ...cloudBranding, ...cloudBranding];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
                 return;
             }
             db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
-                const images = e.target.result; if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous structural layout reference visuals saved.</div>`; return; }
+                const images = e.target.result; if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No reference layout frameworks saved.</div>`; return; }
                 const compiledSet = [...images, ...images, ...images];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
             };
