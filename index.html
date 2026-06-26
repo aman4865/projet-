@@ -258,6 +258,18 @@
         }
         @keyframes slideToastIn { to { transform: translate3d(0, 0, 0); } }
 
+        /* Sync Loader Styles System */
+        #cloud-matrix-loading-shutter {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #090a0f;
+            z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .spinner-node {
+            width: 50px; height: 50px; border: 3px solid rgba(248, 113, 113, 0.1);
+            border-top-color: var(--coral-pink); border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(9,10,15,0.98); z-index: 5000; display: none; justify-content: center; align-items: center; }
         .lightbox.active { display: flex; }
         .lightbox-content img { max-width: 90vw; max-height: 82vh; object-fit: contain; border-radius: 8px; }
@@ -268,6 +280,12 @@
     </style>
 </head>
 <body data-theme="dark" class="liquid-track-wrapper" id="ag-root-context">
+
+    <!-- Cloud Synchronization Shutter Matrix Layout -->
+    <div id="cloud-matrix-loading-shutter" style="display: none;">
+        <div class="spinner-node"></div>
+        <p style="font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: 1px; color: #c3b5fd;">SYNCING PORTFOLIO ASSETS...</p>
+    </div>
 
     <div id="global-toast-matrix-hub"></div>
 
@@ -425,7 +443,7 @@
     </main>
 
     <footer class="liquid-track-wrapper">
-        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with Integrated Key Cloud Infrastructure.</p>
+        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with Secure Real-time Cloud Pipeline.</p>
     </footer>
 
     <div class="lightbox" id="global-lightbox" onclick="closeLightbox()">
@@ -475,11 +493,11 @@
             }
         }
 
-        // FETCH REMOTE DATA VIA ANONYMOUS KEY-VALUE CLOUD SYNC
+        // FETCH REMOTE DATA VIA ANONYMOUS KEY-VALUE CLOUD SYNC + AUTO RENDER PIPELINE
         async function enforceUrlParameterPrivacyFilter() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'public') {
-                // Completely strip management/sharing controls for visitors
+                // Instantly clean navigation arrays
                 document.querySelectorAll(".workspace-nav-node").forEach(el => el.remove());
                 const dashboardContainer = document.getElementById("view-dashboard");
                 if(dashboardContainer) dashboardContainer.remove();
@@ -489,6 +507,9 @@
                 
                 const cloudKeyId = urlParams.get('id');
                 if (cloudKeyId) {
+                    const shutter = document.getElementById("cloud-matrix-loading-shutter");
+                    if(shutter) shutter.style.display = "flex";
+
                     try {
                         const response = await fetch(`https://api.keyvalue.xyz/${cloudKeyId}/agportfolio`);
                         const cloudPayload = await response.json();
@@ -496,19 +517,28 @@
                             localStorage.setItem('ag_cloud_events', JSON.stringify(cloudPayload.events || []));
                             localStorage.setItem('ag_cloud_assets', JSON.stringify(cloudPayload.assets || []));
                             localStorage.setItem('ag_cloud_branding', JSON.stringify(cloudPayload.branding || []));
-                            renderClientShowcase();
+                            
+                            // Re-align structural states
+                            setTimeout(() => {
+                                if(shutter) {
+                                    shutter.style.opacity = "0";
+                                    setTimeout(() => shutter.style.display = "none", 500);
+                                }
+                                renderClientShowcase();
+                            }, 800);
                         }
                     } catch(err) {
-                        console.log("Cloud stream pipeline down.");
+                        if(shutter) shutter.style.display = "none";
+                        console.log("Cloud stream synchronization failure.");
                     }
                 }
             }
         }
 
-        // 🔗 100% FIXED SHORT LINK GENERATOR ENGINE
+        // 🔗 ASYNC REAL-TIME SHORT LINK GENERATOR
         async function triggerSmartShareNotificationSystem() {
             const baseWebUrl = window.location.origin + window.location.pathname;
-            spawnMatrixToastNotification("Synchronizing graphics assets with secure cloud system...");
+            spawnMatrixToastNotification("Uploading live portfolio structure to KeyValue sync network...");
             
             const eventsList = await new Promise(res => db.transaction(["events"],"readonly").objectStore("events").getAll().onsuccess = e => res(e.target.result));
             const assetsList = await new Promise(res => db.transaction(["assets"],"readonly").objectStore("assets").getAll().onsuccess = e => res(e.target.result));
@@ -517,7 +547,6 @@
             const payloadObject = { events: eventsList, assets: assetsList, branding: brandingList };
 
             try {
-                // Fire KeyValue generation without interactive confirmations
                 const tokenGenResponse = await fetch('https://api.keyvalue.xyz/new', { method: 'POST' });
                 const tokenEndpointUrl = await tokenGenResponse.text(); 
                 const cloudKeyId = tokenEndpointUrl.split('/').pop().trim();
@@ -533,7 +562,7 @@
                 spawnMatrixToastNotification("✨ Clean Short Link Copied to Clipboard!");
             } catch(e) {
                 navigator.clipboard.writeText(baseWebUrl + "?view=public");
-                spawnMatrixToastNotification("Public url fallback generated.");
+                spawnMatrixToastNotification("Standard public view mapping used.");
             }
         }
 
@@ -669,12 +698,12 @@
             const cat = document.getElementById("batch-category-select").value;
             let loaded = 0; const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
             if(!arr.length) return;
-            spawnMatrixToastNotification("Uploading assets to cloud database framework...");
+            spawnMatrixToastNotification("Uploading graphic assets map arrays...");
             arr.forEach(file => {
                 const r = new FileReader(); r.onload = async (e) => {
                     const cloudUrl = await uploadImageToImgBB(e.target.result);
                     db.transaction(["assets"], "readwrite").objectStore("assets").add({ eventId: parseInt(activeEventId), title: file.name.split('.')[0].replace(/[-_]/g, ' '), category: cat, imageSrc: cloudUrl, timestamp: Date.now() });
-                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets saved directly!"); syncCoreStateEngine(); }
+                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets committed to local DB!"); syncCoreStateEngine(); }
                 };
                 r.readAsDataURL(file);
             });
@@ -768,7 +797,7 @@
                     return matchedTitle || matchedCategory || matchedRoomEvent;
                 });
             }
-            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No designs registered.</div>`; return; }
+            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No designs registered match filter scope.</div>`; return; }
             const rawCardsHtml = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
             trackNode.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
         }
@@ -778,7 +807,7 @@
             const files = e.target.files; if(!files.length) return;
             cachedPendingBrandingImagesArray = []; const listContainer = document.getElementById("pending-branding-files-list");
             listContainer.innerHTML = ""; let loadedCount = 0; const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-            spawnMatrixToastNotification("Staging structural guidelines rules...");
+            spawnMatrixToastNotification("Staging structural layout parameters mapping...");
             validFiles.forEach(file => {
                 const r = new FileReader(); r.onload = async (event) => {
                     const cloudUrl = await uploadImageToImgBB(event.target.result);
@@ -810,13 +839,13 @@
             const target = document.getElementById("portfolio-branding-visuals-append-track"); if(!target) return;
             if (isSharingIsolationModeActive) {
                 const cloudBranding = JSON.parse(localStorage.getItem('ag_cloud_branding') || '[]');
-                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous structural visual rules found.</div>`; return; }
+                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous visual branding assets found.</div>`; return; }
                 const compiledSet = [...cloudBranding, ...cloudBranding, ...cloudBranding];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
                 return;
             }
             db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
-                const images = e.target.result; if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural visual rules saved.</div>`; return; }
+                const images = e.target.result; if(!images.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous structural layout reference visuals saved.</div>`; return; }
                 const compiledSet = [...images, ...images, ...images];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
             };
