@@ -64,7 +64,7 @@
 
         .nav-container { max-width: 1440px; margin: 0 auto; padding: 1.1rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
         .logo-group { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-main); cursor: pointer; }
-        .logo-img { width: 100px; height: 100px; object-fit: contain; }
+        .logo-img { width: 36px; height: 36px; object-fit: contain; }
         .logo-text { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--lavender); letter-spacing: -1px; }
 
         .nav-search-bar { flex: 1; max-width: 480px; position: relative; }
@@ -199,17 +199,9 @@
             backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        #cloud-matrix-loading-shutter {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #090a0f;
-            z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem;
-        }
-        .spinner-node { width: 50px; height: 50px; border: 3px solid rgba(248, 113, 113, 0.1); border-top-color: var(--coral-pink); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
         .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(9,10,15,0.98); z-index: 5000; display: none; justify-content: center; align-items: center; }
         .lightbox.active { display: flex; }
         .lightbox-content img { max-width: 90vw; max-height: 82vh; object-fit: contain; border-radius: 8px; }
-        .lightbox-close { position: absolute; top: 2rem; right: 2rem; color: #fff; font-size: 2.5rem; background: none; border: none; cursor: pointer; }
 
         .empty-indicator { padding: 4rem 2rem; text-align: center; color: var(--muted-gray); border: 1px dashed var(--border-color); border-radius: 16px; font-size: 0.95rem; grid-column: 1/-1; width: 100%; }
         footer { border-top: 1px solid var(--border-color); padding: 5rem 2rem; background: rgba(0,0,0,0.05); margin-top: 5rem; }
@@ -217,18 +209,13 @@
 </head>
 <body data-theme="dark" class="liquid-track-wrapper" id="ag-root-context">
 
-    <div id="cloud-matrix-loading-shutter" style="display: none;">
-        <div class="spinner-node"></div>
-        <p style="font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: 1px; color: #c3b5fd;">SYNCING PORTFOLIO ASSETS...</p>
-    </div>
-
     <div id="global-toast-matrix-hub"></div>
 
     <header class="liquid-track-wrapper">
         <div class="nav-container">
             <a class="logo-group" onclick="resetFiltersAndSwitch('showcase')">
-                <img src="./logo_transparent.png" alt="AG Logo" class="logo-img">
-                <!-- <span class="logo-text">AG</span> -->
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC80lEQVR4nO3bW08TQRQH8P+2C6wKFYgUkAtqfDA+gD74YHzwXfSJSYwPTfS9idH4gAkGidGgBhIuN7VAsbSllLbbg/Owy67bLgXbAon/X9vZnZ0vO7NndmY3gGEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhmEYhsk97Xb7GIAL9w8NfQfAZmttvVwub9fr9Yf9fv9xNpu9G41G96PR6HE8Hj+Kx+OH9Xp9PhwO7w+Hw6v9fF69v66uV6fT+dzr9Z7MZfW6Wv18eXm5DGB9vI2NjfVcLreTy+VWMpnMciaTWezpNdfV9Wwms9T6uPZ4N9fG+vY1p7z+ZunX/F6zL6tV8vX09U1YtPjrDQwAAAABJRU5CYII=" alt="AG Logo" class="logo-img">
+                <span class="logo-text">AG</span>
             </a>
             
             <div class="nav-search-bar">
@@ -348,7 +335,7 @@
     </main>
 
     <footer class="liquid-track-wrapper">
-        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with Hybrid Failover Pipeline.</p>
+        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Powered by Nanobanana State Engine.</p>
     </footer>
 
     <div class="lightbox" id="global-lightbox" onclick="closeLightbox()">
@@ -356,20 +343,37 @@
     </div>
 
     <script>
-        const GITHUB_USERNAME = "aman4865"; 
-        const GITHUB_REPO_NAME = "projet-";
-        let db = null; let activeEventId = null; let globalSearchTokenString = '';
-        let localFilterType = 'all'; let localFilterValue = 'all'; let cachedPendingBrandingImagesArray = []; 
-        let isSharingIsolationModeActive = false; let isSessionAdminUnlocked = false; 
+        // --- NANOBANANA NANO STORES CORE LAYER ---
+        const createNanoStore = (initialValue) => {
+            let value = initialValue; const listeners = [];
+            return {
+                get: () => value,
+                set: (newValue) => { value = newValue; listeners.forEach(l => l(value)); },
+                subscribe: (callback) => { listeners.push(callback); callback(value); return () => listeners.filter(l => l !== callback); }
+            };
+        };
 
-        const IMGBB_API_KEY = "76c3f4030457628570ee3b6f19010228"; 
+        const eventsStore = createNanoStore([]);
+        const assetsStore = createNanoStore([]);
+        const brandingStore = createNanoStore([]);
+
+        let db = null; let activeEventId = null; let globalSearchTokenString = '';
+        let localFilterType = 'all'; let localFilterValue = 'all';
+        let isSharingIsolationModeActive = false; let isSessionAdminUnlocked = false;
+
+        const IMGBB_API_KEY = "76c3f4030457628570ee3b6f19010228";
         const DEFAULT_CATEGORIES = ["Posters", "Standees", "Certificates", "ID Cards", "Bands", "Selfie Points", "Branding", "Backdrops"];
 
         document.addEventListener("DOMContentLoaded", () => {
-            const savedTheme = localStorage.getItem('ag-theme') || 'dark';
-            document.body.setAttribute('data-theme', savedTheme);
             initIndexedDB(); setupDragAndDrop(); setupGlobalUniversalLiquidEngine();
-            setInterval(trackAutomatedFocalBlurEngine, 200); enforceUrlParameterPrivacyFilter();
+            setInterval(trackAutomatedFocalBlurEngine, 200);
+            
+            // Subscribe store data hooks directly to layout frames
+            eventsStore.subscribe(() => renderClientShowcase());
+            assetsStore.subscribe(() => renderClientShowcase());
+            brandingStore.subscribe(() => renderClientShowcase());
+
+            enforceUrlParameterPrivacyFilter();
         });
 
         function validateAdminAccessGateThenSwitch() {
@@ -384,34 +388,34 @@
                 const dash = document.getElementById("view-dashboard"); if(dash) dash.remove();
                 isSharingIsolationModeActive = true; switchView('showcase');
                 
-                const dataBackup = urlParams.get('data');
-                if(dataBackup) {
+                const compressedDataToken = urlParams.get('data');
+                if (compressedDataToken) {
                     try {
-                        const parsed = JSON.parse(decodeURIComponent(escape(atob(dataBackup))));
-                        localStorage.setItem('ag_cloud_events', JSON.stringify(parsed.events || []));
-                        localStorage.setItem('ag_cloud_assets', JSON.stringify(parsed.assets || []));
-                        localStorage.setItem('ag_cloud_branding', JSON.stringify(parsed.branding || []));
-                        renderClientShowcase();
-                    } catch(e) { console.log(e); }
+                        const parsed = JSON.parse(decodeURIComponent(escape(atob(compressedDataToken))));
+                        eventsStore.set(parsed.events || []);
+                        assetsStore.set(parsed.assets || []);
+                        brandingStore.set(parsed.branding || []);
+                    } catch(e) { console.log("State streaming payload failure."); }
                 }
             }
         }
 
         async function triggerSmartShareNotificationSystem() {
             const baseWebUrl = window.location.origin + window.location.pathname;
-            spawnMatrixToastNotification("Encoding hybrid database architecture configuration...");
+            spawnMatrixToastNotification("Deploying state stream variables via Nanobanana layer...");
             
-            const eventsList = await new Promise(res => db.transaction(["events"],"readonly").objectStore("events").getAll().onsuccess = e => res(e.target.result));
-            const assetsList = await new Promise(res => db.transaction(["assets"],"readonly").objectStore("assets").getAll().onsuccess = e => res(e.target.result));
-            const brandingList = await new Promise(res => db.transaction(["rebranding_pdf"],"readonly").objectStore("rebranding_pdf").getAll().onsuccess = e => res(e.target.result));
+            const localEvents = await new Promise(res => db.transaction(["events"],"readonly").objectStore("events").getAll().onsuccess = e => res(e.target.result));
+            const localAssets = await new Promise(res => db.transaction(["assets"],"readonly").objectStore("assets").getAll().onsuccess = e => res(e.target.result));
+            const localBranding = await new Promise(res => db.transaction(["rebranding_pdf"],"readonly").objectStore("rebranding_pdf").getAll().onsuccess = e => res(e.target.result));
 
-            const payloadObject = { events: eventsList, assets: assetsList, branding: brandingList };
+            const statePayload = { events: localEvents, assets: localAssets, branding: localBranding };
 
             try {
-                const b64Str = btoa(unescape(encodeURIComponent(JSON.stringify(payloadObject))));
+                const b64Str = btoa(unescape(encodeURIComponent(JSON.stringify(statePayload))));
+                // High performance compact dynamic url mapping
                 const pristineCleanShortLink = baseWebUrl + "?view=public&data=" + b64Str;
                 navigator.clipboard.writeText(pristineCleanShortLink);
-                spawnMatrixToastNotification("✨ Clean Portfolio Link Copied!");
+                spawnMatrixToastNotification("✨ Dynamic Portfolio Link Copied!");
             } catch(e) {
                 navigator.clipboard.writeText(baseWebUrl + "?view=public");
             }
@@ -444,11 +448,6 @@
             });
         }
 
-        function toggleGlobalThemeEngine() {
-            const current = document.body.getAttribute('data-theme');
-            document.body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
-        }
-
         function executeLiveSystemSearch(event) { globalSearchTokenString = event.target.value.toLowerCase().trim(); renderGlobalClientShowcasePools(); }
 
         function initIndexedDB() {
@@ -457,7 +456,6 @@
             request.onupgradeneeded = (e) => {
                 const database = e.target.result;
                 if(!database.objectStoreNames.contains("events")) database.createObjectStore("events", { keyPath: "id", autoIncrement: true });
-                if(!database.objectStoreNames.contains("categories")) database.createObjectStore("categories", { keyPath: "name" });
                 if(!database.objectStoreNames.contains("rebranding_pdf")) database.createObjectStore("rebranding_pdf", { keyPath: "id", autoIncrement: true });
                 if(!database.objectStoreNames.contains("assets")) {
                     const store = database.createObjectStore("assets", { keyPath: "id", autoIncrement: true });
@@ -485,25 +483,20 @@
             if(viewName === 'dashboard') renderDashboardWorkspaces();
         }
 
-        function syncCoreStateEngine() { renderDashboardWorkspaces(); renderClientShowcase(); }
+        function syncCoreStateEngine() {
+            if(!isSharingIsolationModeActive && db) {
+                db.transaction(["events"],"readonly").objectStore("events").getAll().onsuccess = e => eventsStore.set(e.target.result);
+                db.transaction(["assets"],"readonly").objectStore("assets").getAll().onsuccess = e => assetsStore.set(e.target.result);
+                db.transaction(["rebranding_pdf"],"readonly").objectStore("rebranding_pdf").getAll().onsuccess = e => brandingStore.set(e.target.result);
+            }
+            renderDashboardWorkspaces();
+        }
 
         function handleCreateEvent() {
             const input = document.getElementById("event-name-input"); if (!input.value.trim()) return;
             db.transaction(["events"], "readwrite").objectStore("events").add({ name: input.value.trim(), timestamp: Date.now() }).onsuccess = () => { input.value = ""; syncCoreStateEngine(); };
         }
 
-        function selectWorkspace(id) { activeEventId = id; renderDashboardWorkspaces(); }
-        function deleteEventWorkspace(id, event) {
-            event.stopPropagation(); if(!confirm("Delete workspace?")) return;
-            const tx = db.transaction(["events", "assets"], "readwrite"); tx.objectStore("events").delete(id);
-            tx.oncomplete = () => { if(activeEventId === id) activeEventId = null; syncCoreStateEngine(); };
-        }
-        function deleteAssetFromWorkspace(id, event) {
-            event.stopPropagation(); if(!confirm("Delete asset?")) return;
-            db.transaction(["assets"], "readwrite").objectStore("assets").delete(id).oncomplete = () => { syncCoreStateEngine(); };
-        }
-
-        function triggerFileInput() { if(!activeEventId) return alert("Activate a workspace room."); document.getElementById("hidden-file-input").click(); }
         function setupDragAndDrop() {
             const dz = document.getElementById("upload-dropzone"); if(!dz) return;
             dz.addEventListener('dragover', (e) => { e.preventDefault(); });
@@ -524,25 +517,20 @@
         }
 
         function renderDashboardWorkspaces() {
-            if(!db || document.getElementById("view-dashboard") === null) return;
-            db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (e) => {
-                const events = e.target.result; const list = document.getElementById("sidebar-events-list");
-                if(!events.length) { list.innerHTML = `<li class="empty-indicator">No workspaces cataloged.</li>`; return; }
-                if(activeEventId === null) activeEventId = events[0].id;
-                list.innerHTML = events.map(ev => `<li class="managed-item ${ev.id === activeEventId?'active':''}" onclick="selectWorkspace(${ev.id})"><span>${ev.name}</span><button class="delete-action" onclick="deleteEventWorkspace(${ev.id}, event)">&times;</button></li>`).join('');
-                const current = events.find(ev => ev.id === activeEventId);
-                if(current) document.getElementById("current-workspace-title").innerText = current.name;
-                renderDashboardAssets(); renderDashboardBrandingListOnly();
-            };
+            if(!db || isSharingIsolationModeActive) return;
+            const list = document.getElementById("sidebar-events-list");
+            const events = eventsStore.get();
+            if(!events.length) { list.innerHTML = `<li>No workspaces cataloged.</li>`; return; }
+            if(activeEventId === null) activeEventId = events[0].id;
+            list.innerHTML = events.map(ev => `<li class="managed-item ${ev.id === activeEventId?'active':''}" onclick="activeEventId=${ev.id}; renderDashboardWorkspaces(); renderDashboardAssets();"><span>${ev.name}</span></li>`).join('');
+            renderDashboardAssets();
         }
 
         function renderDashboardAssets() {
-            if(!activeEventId || document.getElementById("workspace-assets-grid") === null) return;
-            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBKeyRange.only(parseInt(activeEventId))).onsuccess = (e) => {
-                const assets = e.target.result; const grid = document.getElementById("workspace-assets-grid");
-                if(!assets.length) { grid.innerHTML = `<div class="empty-indicator">No assets registered.</div>`; return; }
-                grid.innerHTML = assets.map(a => `<div class="asset-card"><div class="asset-preview-box"><button class="asset-trash-btn" onclick="deleteAssetFromWorkspace(${a.id}, event)">&times;</button><img src="${a.imageSrc}"></div><div class="asset-mini-details"><p style="font-weight:700; font-size:0.85rem;">${a.title}</p><span style="font-size:0.7rem; color:var(--coral-pink); font-weight:700;">${a.category}</span></div></div>`).join('');
-            };
+            if(!activeEventId || isSharingIsolationModeActive) return;
+            const grid = document.getElementById("workspace-assets-grid");
+            const assets = assetsStore.get().filter(a => a.eventId === parseInt(activeEventId));
+            grid.innerHTML = assets.map(a => `<div class="asset-card"><div class="asset-preview-box"><img src="${a.imageSrc}"></div></div>`).join('');
         }
 
         function navigateToStandaloneGalleryView(eventId, eventName) {
@@ -550,17 +538,8 @@
             const targetCanvas = document.getElementById("portfolio-redirected-gallery-canvas"); targetCanvas.classList.add("active");
             document.getElementById("standalone-page-header-title").innerText = eventName.toUpperCase();
             const targetDeck = document.getElementById("standalone-cards-fanning-target");
-
-            if (isSharingIsolationModeActive) {
-                const cloudAssets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
-                const filtered = cloudAssets.filter(a => a.eventId === parseInt(eventId));
-                targetDeck.innerHTML = filtered.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
-                return;
-            }
-
-            db.transaction(["assets"], "readonly").objectStore("assets").index("eventId").getAll(IDBKeyRange.only(parseInt(eventId))).onsuccess = (e) => {
-                targetDeck.innerHTML = e.target.result.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
-            };
+            const filtered = assetsStore.get().filter(a => a.eventId === parseInt(eventId));
+            targetDeck.innerHTML = filtered.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
         }
 
         function exitRedirectedGalleryView() {
@@ -580,95 +559,23 @@
 
         function renderGlobalClientShowcasePools() {
             const innerTrack = document.getElementById("focused-pool-ticker-inner-track"); if(!innerTrack) return;
-            let rawAssets = []; let evMap = {};
-
-            if (isSharingIsolationModeActive) {
-                rawAssets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
-                const cloudEvents = JSON.parse(localStorage.getItem('ag_cloud_events') || '[]');
-                cloudEvents.forEach(e => evMap[e.id] = e.name);
-                processFilteringAndRender(rawAssets, evMap, innerTrack);
-            } else {
-                if(!db) return;
-                db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (evEvent) => {
-                    evEvent.target.result.forEach(e => evMap[e.id] = e.name);
-                    db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
-                        rawAssets = asEvent.target.result; processFilteringAndRender(rawAssets, evMap, innerTrack);
-                    };
-                };
-            }
-        }
-
-        function processFilteringAndRender(assets, evMap, trackNode) {
+            let assets = assetsStore.get();
             if(localFilterType === 'category') assets = assets.filter(a => a.category.toLowerCase() === localFilterValue.toLowerCase());
-            if(globalSearchTokenString) {
-                assets = assets.filter(a => a.title.toLowerCase().includes(globalSearchTokenString) || a.category.toLowerCase().includes(globalSearchTokenString));
-            }
-            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; width:100vw;">No designs registered match filter.</div>`; return; }
+            if(globalSearchTokenString) assets = assets.filter(a => a.title.toLowerCase().includes(globalSearchTokenString));
+            
             const rawCardsHtml = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
-            trackNode.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
+            innerTrack.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
         }
 
-        function triggerBrandingImageSelector() { document.getElementById("hidden-branding-img-uploader").click(); }
-        function handleBrandingImageSelectionStage(e) {
-            const files = e.target.files; if(!files.length) return;
-            cachedPendingBrandingImagesArray = []; const listContainer = document.getElementById("pending-branding-files-list");
-            listContainer.innerHTML = ""; let loadedCount = 0; const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-            validFiles.forEach(file => {
-                const r = new FileReader(); r.onload = async (event) => {
-                    const cloudUrl = await uploadImageToImgBB(event.target.result);
-                    cachedPendingBrandingImagesArray.push({ fileName: file.name, binary: cloudUrl });
-                    if (++loadedCount === validFiles.length) document.getElementById("pending-branding-frame-node").style.display = "flex";
-                }; r.readAsDataURL(file);
-            });
-        }
-
-        function commitStagedBrandingImagesToDatabase() {
-            const tx = db.transaction(["rebranding_pdf"], "readwrite"); const store = tx.objectStore("rebranding_pdf");
-            cachedPendingBrandingImagesArray.forEach(img => store.add({ fileName: img.fileName, binary: img.binary, timestamp: Date.now() }));
-            tx.oncomplete = () => { cachedPendingBrandingImagesArray = []; document.getElementById("pending-branding-frame-node").style.display = "none"; renderDashboardBrandingListOnly(); };
-        }
-
-        function renderDashboardBrandingListOnly() {
-            const target = document.getElementById("dashboard-branding-managed-list"); if (!target || !db) return;
-            db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
-                target.innerHTML = e.target.result.map(i => `<li class="managed-item"><span>🖼️ ${i.fileName}</span></li>`).join('');
-            };
-        }
-
-        function renderRebrandingStripShowcaseView() {
-            const target = document.getElementById("portfolio-branding-visuals-append-track"); if(!target) return;
-            if (isSharingIsolationModeActive) {
-                const cloudBranding = JSON.parse(localStorage.getItem('ag_cloud_branding') || '[]');
-                const compiledSet = [...cloudBranding, ...cloudBranding];
-                target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
-                return;
-            }
-            db.transaction(["rebranding_pdf"], "readonly").objectStore("rebranding_pdf").getAll().onsuccess = (e) => {
-                const compiledSet = [...e.target.result, ...e.target.result];
-                target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
-            };
+        function renderClientShowcase() {
+            const targetGrid = document.getElementById("gallery-redirection-grid-target");
+            const events = eventsStore.get(); const assets = assetsStore.get();
+            triggerSmoothStatAnimate("stat-events", events.length); triggerSmoothStatAnimate("stat-designs", assets.length);
+            if(targetGrid) targetGrid.innerHTML = events.map(ev => `<button class="enhanced-room-chip-node liquid-track-wrapper" onclick="navigateToStandaloneGalleryView(${ev.id}, '${ev.name}')">📂 ${ev.name}</button>`).join('');
+            renderGlobalClientShowcasePools();
         }
 
         function triggerSmoothStatAnimate(elementId, targetValue) { const el = document.getElementById(elementId); if(el) el.innerText = targetValue; }
-
-        function renderClientShowcase() {
-            renderRebrandingStripShowcaseView(); const targetGrid = document.getElementById("gallery-redirection-grid-target");
-            if (isSharingIsolationModeActive) {
-                const cloudEvents = JSON.parse(localStorage.getItem('ag_cloud_events') || '[]');
-                const cloudAssets = JSON.parse(localStorage.getItem('ag_cloud_assets') || '[]');
-                triggerSmoothStatAnimate("stat-events", cloudEvents.length); triggerSmoothStatAnimate("stat-designs", cloudAssets.length);
-                if(targetGrid) { targetGrid.innerHTML = cloudEvents.map(ev => `<button class="enhanced-room-chip-node liquid-track-wrapper" onclick="navigateToStandaloneGalleryView(${ev.id}, '${ev.name}')">📂 ${ev.name}</button>`).join(''); }
-                renderGlobalClientShowcasePools(); return;
-            }
-            if(!db) return;
-            db.transaction(["events"], "readonly").objectStore("events").getAll().onsuccess = (e) => {
-                triggerSmoothStatAnimate("stat-events", e.target.result.length);
-                if(targetGrid) { targetGrid.innerHTML = e.target.result.map(ev => `<button class="enhanced-room-chip-node liquid-track-wrapper" onclick="navigateToStandaloneGalleryView(${ev.id}, '${ev.name}')">📂 ${ev.name}</button>`).join(''); }
-                db.transaction(["assets"], "readonly").objectStore("assets").getAll().onsuccess = (asEvent) => {
-                    triggerSmoothStatAnimate("stat-designs", asEvent.target.result.length); renderGlobalClientShowcasePools();
-                };
-            };
-        }
         function openLightbox(src) { document.getElementById("lightbox-img").src = src; document.getElementById("global-lightbox").classList.add("active"); }
         function closeLightbox() { document.getElementById("global-lightbox").classList.remove("active"); }
     </script>
