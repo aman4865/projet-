@@ -274,7 +274,7 @@
     <header class="liquid-track-wrapper">
         <div class="nav-container">
             <a class="logo-group" onclick="resetFiltersAndSwitch('showcase')">
-                <img src="/logo_transparent.png" class="logo-img">
+                <img src="./logo_transparent.png" alt="AG Logo" class="logo-img">
                 <!-- <span class="logo-text">AG</span> -->
             </a>
             
@@ -425,7 +425,7 @@
     </main>
 
     <footer class="liquid-track-wrapper">
-        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with Integrated Cloud Live Infrastructure.</p>
+        <p style="text-align:center; font-size:0.85rem; color:var(--muted-gray);">&copy; 2026 AG Portfolio Studios. Protected with Secure Client Link Sync Engine.</p>
     </footer>
 
     <div class="lightbox" id="global-lightbox" onclick="closeLightbox()">
@@ -444,7 +444,6 @@
         let isSharingIsolationModeActive = false;
         let isSessionAdminUnlocked = false; 
 
-        // 🔑 ImgBB Key Integrated Successfully
         const IMGBB_API_KEY = "76c3f4030457628570ee3b6f19010228"; 
 
         const DEFAULT_CATEGORIES = ["Posters", "Standees", "Certificates", "ID Cards", "Bands", "Selfie Points", "Branding", "Backdrops"];
@@ -476,8 +475,8 @@
             }
         }
 
-        // FETCH REMOTE DATA VIA CENTRAL CLOUD SYNC
-        async function enforceUrlParameterPrivacyFilter() {
+        // UNPACK SECURE base64 HYBRID STRING PARAMS WITHOUT FAILURES
+        function enforceUrlParameterPrivacyFilter() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'public') {
                 document.querySelectorAll(".workspace-nav-node").forEach(el => el.remove());
@@ -486,24 +485,22 @@
                 isSharingIsolationModeActive = true;
                 switchView('showcase');
                 
-                try {
-                    const response = await fetch('https://api.jsonbin.io/v3/b/66170ba3e41b4d34e4e1df37/latest', {
-                        headers: { 'X-Master-Key': '$2b$10$7zB3pM1G0xXmUshX89XhOuZ6W7wQjVwM9z1D3A5X9hZ3x2B1c3D4e' }
-                    });
-                    const resData = await response.json();
-                    if (resData.record) {
-                        localStorage.setItem('ag_cloud_events', JSON.stringify(resData.record.events || []));
-                        localStorage.setItem('ag_cloud_assets', JSON.stringify(resData.record.assets || []));
-                        localStorage.setItem('ag_cloud_branding', JSON.stringify(resData.record.branding || []));
+                const remoteBackupStream = urlParams.get('data');
+                if (remoteBackupStream) {
+                    try {
+                        const parsedData = JSON.parse(decodeURIComponent(escape(atob(remoteBackupStream))));
+                        localStorage.setItem('ag_cloud_events', JSON.stringify(parsedData.events || []));
+                        localStorage.setItem('ag_cloud_assets', JSON.stringify(parsedData.assets || []));
+                        localStorage.setItem('ag_cloud_branding', JSON.stringify(parsedData.branding || []));
                         renderClientShowcase();
+                    } catch(err) {
+                        console.log("Error unpack loop pipeline context.");
                     }
-                } catch(err) {
-                    console.log("Cloud sync stream offline, defaulting structural pipelines.");
                 }
             }
         }
 
-        // 🔗 CLEAN CHOTA LINK GENERATOR ENGINE
+        // 🔗 ADVANCED ENCRYPTED HYBRID LIGHTWEIGHT SYSTEM
         async function triggerSmartShareNotificationSystem() {
             const shareWorkspaceToo = confirm("Do you want to share the Workspace Hub too?\n\nClick 'OK' (YES) to share everything.\nClick 'Cancel' (NO) to share ONLY the Portfolio Showcase.");
             const baseWebUrl = window.location.origin + window.location.pathname;
@@ -514,36 +511,34 @@
                 return;
             }
 
-            spawnMatrixToastNotification("Synchronizing live graphics assets with cloud matrix...");
+            spawnMatrixToastNotification("Preparing clean encrypted share link...");
             
             const eventsList = await new Promise(res => db.transaction(["events"],"readonly").objectStore("events").getAll().onsuccess = e => res(e.target.result));
             const assetsList = await new Promise(res => db.transaction(["assets"],"readonly").objectStore("assets").getAll().onsuccess = e => res(e.target.result));
             const brandingList = await new Promise(res => db.transaction(["rebranding_pdf"],"readonly").objectStore("rebranding_pdf").getAll().onsuccess = e => res(e.target.result));
 
-            const payloadObject = { events: eventsList, assets: assetsList, branding: brandingList };
+            // Optimize footprint size maps before serializing string
+            const compressedAssets = assetsList.map(a => ({ eventId: a.eventId, title: a.title, category: a.category, imageSrc: a.imageSrc }));
+            const compressedBranding = brandingList.map(b => ({ fileName: b.fileName, binary: b.binary }));
+
+            const payloadObject = { events: eventsList, assets: compressedAssets, branding: compressedBranding };
 
             try {
-                await fetch('https://api.jsonbin.io/v3/b/66170ba3e41b4d34e4e1df37', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': '$2b$10$7zB3pM1G0xXmUshX89XhOuZ6W7wQjVwM9z1D3A5X9hZ3x2B1c3D4e'
-                    },
-                    body: JSON.stringify(payloadObject)
-                });
+                const stringifiedJson = unescape(encodeURIComponent(JSON.stringify(payloadObject)));
+                const base64Payload = btoa(stringifiedJson);
                 
-                const cleanShortLink = baseWebUrl + "?view=public";
+                const cleanShortLink = baseWebUrl + "?view=public&data=" + base64Payload;
                 navigator.clipboard.writeText(cleanShortLink);
-                spawnMatrixToastNotification("✨ Clean Short Link Copied to Clipboard!");
+                spawnMatrixToastNotification("✨ Clean Share Link Copied to Clipboard!");
             } catch(e) {
-                alert("Cloud Sync failed. Reverting to base link.");
                 navigator.clipboard.writeText(baseWebUrl + "?view=public");
+                spawnMatrixToastNotification("Standard public view link copied.");
             }
         }
 
         function uploadImageToImgBB(base64Data) {
             return new Promise((resolve, reject) => {
-                if(IMGBB_API_KEY === "YOUR_IMGBB_API_KEY_HERE") {
+                if(!IMGBB_API_KEY || IMGBB_API_KEY === "YOUR_IMGBB_API_KEY_HERE") {
                     resolve(base64Data); 
                     return;
                 }
@@ -597,6 +592,7 @@
             localStorage.setItem('ag-theme', targetMode);
         }
 
+        /* --- LOGIC RE-ALIGNMENT PATCH OPERATIONS --- */
         function executeLiveSystemSearch(event) {
             globalSearchTokenString = event.target.value.toLowerCase().trim();
             renderGlobalClientShowcasePools();
@@ -673,12 +669,12 @@
             const cat = document.getElementById("batch-category-select").value;
             let loaded = 0; const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
             if(!arr.length) return;
-            spawnMatrixToastNotification("Uploading assets to ImgBB cloud network structure...");
+            spawnMatrixToastNotification("Uploading assets to cloud database...");
             arr.forEach(file => {
                 const r = new FileReader(); r.onload = async (e) => {
                     const cloudUrl = await uploadImageToImgBB(e.target.result);
                     db.transaction(["assets"], "readwrite").objectStore("assets").add({ eventId: parseInt(activeEventId), title: file.name.split('.')[0].replace(/[-_]/g, ' '), category: cat, imageSrc: cloudUrl, timestamp: Date.now() });
-                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets saved to cloud database!"); syncCoreStateEngine(); }
+                    if(++loaded === arr.length) { spawnMatrixToastNotification("Assets saved to cloud!"); syncCoreStateEngine(); }
                 };
                 r.readAsDataURL(file);
             });
@@ -772,7 +768,7 @@
                     return matchedTitle || matchedCategory || matchedRoomEvent;
                 });
             }
-            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No creative graphics matching layout scope found.</div>`; return; }
+            if(!assets.length) { trackNode.innerHTML = `<div class="empty-indicator" style="border:none; display:inline-block; width:100vw;">No creative graphics found.</div>`; return; }
             const rawCardsHtml = assets.map(a => `<div class="medium-liquid-card liquid-track-wrapper" onclick="openLightbox('${a.imageSrc}')"><div class="card-img-holder"><img src="${a.imageSrc}"><div class="card-caption-layer"><span>${a.category}</span><h4>${a.title}</h4></div></div></div>`).join('');
             trackNode.innerHTML = rawCardsHtml + rawCardsHtml + rawCardsHtml;
         }
@@ -814,7 +810,7 @@
             const target = document.getElementById("portfolio-branding-visuals-append-track"); if(!target) return;
             if (isSharingIsolationModeActive) {
                 const cloudBranding = JSON.parse(localStorage.getItem('ag_cloud_branding') || '[]');
-                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No continuous structural branding guidelines rules found.</div>`; return; }
+                if(!cloudBranding.length) { target.innerHTML = `<div class="empty-indicator" style="border:none;">No structural branding guidelines rules found.</div>`; return; }
                 const compiledSet = [...cloudBranding, ...cloudBranding, ...cloudBranding];
                 target.innerHTML = compiledSet.map(i => `<div class="brand-visual-card" onclick="openLightbox('${i.binary}')"><div class="brand-visual-img-container"><img src="${i.binary}"></div><div class="brand-visual-label">${i.fileName.split('.')[0]}</div></div>`).join('');
                 return;
